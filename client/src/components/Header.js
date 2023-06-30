@@ -2,6 +2,8 @@ import Navigator from "./Navigator.js";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import React, { useEffect, useState } from "react";
+import LoginButton from "./Login/LoginButton.js";
+import LogoutButton from "./Login/LogoutButton.js";
 
 const Header = () => {
 
@@ -25,11 +27,13 @@ const Header = () => {
 
     return (
         <StyledHeader isTransparent={isTransparent}>
-            <LogoContainer to={"/"}>
+            <LogoContainer to={"/home"}>
                 <span>C</span>
                 <span>S</span>
             </LogoContainer>
             <Navigator/>
+            <LoginButton/>
+            <LogoutButton/>
         </StyledHeader>
     )
 };

@@ -9,6 +9,8 @@ const Main = ( {children} ) => {
 
 const Container = styled.main`
   width: 100%;
+  position: absolute;
+  top: 5em;
   background-color: white;
   min-height: 80vh;
   

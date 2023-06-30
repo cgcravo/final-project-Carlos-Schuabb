@@ -24,8 +24,8 @@ const App = () => {
         <Header />
         <Main>
         <Routes>
-            <Route path="/welcome" element={<Welcome />}/>
-            <Route path="/" element={<Home />}/>
+            <Route path="/" element={<Welcome />}/>
+            <Route path="/home" element={<Home />}/>
             <Route path="/about" element={<About />}/>
             <Route path="/profile" element={<Profile />}/>
             <Route path="/find-a-bloco" element={<FindOne />}/>

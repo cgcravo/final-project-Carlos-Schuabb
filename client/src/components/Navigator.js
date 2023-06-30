@@ -5,7 +5,7 @@ import React from "react";
 const Navigator = () => {
     return (
         <NavContainer>
-            <StyledLink to="/">Home</StyledLink>
+            <StyledLink to="/home">Home</StyledLink>
             <StyledLink to="/about">About</StyledLink>
             <StyledLink to="/contact">Contact</StyledLink>
             <StyledLink to="/projects">Projects</StyledLink>

@@ -23,6 +23,9 @@ const StyledFooter = styled.footer`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 
   & .icon{
     font-size: 1em;
