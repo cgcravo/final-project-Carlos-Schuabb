@@ -7,6 +7,7 @@ import App from './App';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
+    <FavoritesProvider>
     <UserProvider>
     <Auth0Provider
       domain="dev-c46hs07da4td18ag.us.auth0.com"
@@ -18,6 +19,7 @@ root.render(
       <App />
     </Auth0Provider>
     </UserProvider>
+    </FavoritesProvider>
     </React.StrictMode>,
   );
 
