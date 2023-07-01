@@ -1,4 +1,5 @@
 import LoginButton from "../Login/LoginButton"
+import styled from "styled-components";
 
 const Welcome = () => {
 
@@ -7,5 +8,7 @@ const Welcome = () => {
     <LoginButton/>
   </>
 };
+
+
 
 export default Welcome;
