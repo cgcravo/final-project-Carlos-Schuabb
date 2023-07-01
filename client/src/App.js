@@ -7,7 +7,7 @@ import Main from "./components/Main";
 import Footer from "./components/Footer";
 import Welcome from "./components/Welcome/Welcome";
 import Home from "./components/Home/Home";
-import Profile from "./components/Profile/Profile";
+import UserProfile from "./components/Profile/UsersProfile";
 import About from "./components/About/About";
 import FindOne from "./components/FindOne/FindOne";
 import FindAll from "./components/FindAll/FindAll";
@@ -27,7 +27,7 @@ const App = () => {
             <Route path="/" element={<Welcome />}/>
             <Route path="/home" element={<Home />}/>
             <Route path="/about" element={<About />}/>
-            <Route path="/profile" element={<Profile />}/>
+            <Route path="/profile" element={<UserProfile />}/>
             <Route path="/find-a-bloco" element={<FindOne />}/>
             <Route path="/find-all-blocos" element={<FindAll />}/>
             <Route path="/new-bloco" element={<New />}/>

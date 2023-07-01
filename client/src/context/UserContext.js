@@ -1,4 +1,4 @@
-//context for keeping track of user favorites
+//context for keeping track of user
 import { createContext, useState } from "react";
 
 export const UserContext = createContext(null);
