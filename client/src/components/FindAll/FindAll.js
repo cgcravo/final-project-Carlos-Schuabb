@@ -26,9 +26,9 @@ const FindAll = () => {
 
   //pass all the blocos data instead of these markers
   const markers = [
-    { address: "Address1", lat: 18.5204, lng: 73.8567 },
-    { address: "Address2", lat: 18.5314, lng: 73.8446 },
-    { address: "Address3", lat: 18.5642, lng: 73.7769 },
+    {  lat: 18.5204, lng: 73.8567 },
+    {  lat: 18.5314, lng: 73.8446 },
+    {  lat: 18.5642, lng: 73.7769 },
   ];
   console.log(markers)
 
@@ -56,6 +56,7 @@ const FindAll = () => {
     <Header/>
     <Main>
     <p>This is the FindAll page</p>
+
     <MapApp className="Map-App">
       {!isLoaded ? (
         <h1>Loading...</h1>
@@ -66,13 +67,14 @@ const FindAll = () => {
       //Set the isOpen state to false to hide the InfoWindow component by clicking anywhere on the map
       onClick={() => setIsOpen(false)}
     >
-      {markers.map(({ address, lat, lng }, index) => (
+      {markers.map(({ lat, lng }, index) => (
         <Marker
           key={index}
           position={{ lat, lng }}
           onClick={() => {
-            handleMarkerClick(lat, lng, address);
+            handleMarkerClick(lat, lng);
           }}
+          onLoad={()=>{console.log("Marker has been loaded")}}
         >
           {isOpen && infoWindowData?.id === index && (
             //Creates a window with info 
@@ -83,7 +85,7 @@ const FindAll = () => {
                 setIsOpen(false);
               }}
             >
-              <h3>{infoWindowData.address}</h3>
+              {/* <h3>{infoWindowData.address}</h3> */}
             </InfoWindow>
           )}
         </Marker>

@@ -9,22 +9,24 @@ const LoginButtonWelcome = () => {
 };
 
 const StyledButton = styled.button`
-  font-family: var(--main-font-family);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
   height: 2em;
   background-color: #635dff;
   color: black;
   font-weight: bold;
-  text-decoration: none;
-  text-align: center;
   font-size: 1.5em;
-  margin: 1em 1em;
+  margin: 1.5em 1em;
   padding: 0 2em;
   border: none;
   border-radius:0.5em;
+  transition: 0.5s ease-in-out;
 
   &:hover{
-      outline: 0.05em solid black;
+    scale: 1.25;
   }
-`
+`;
 
 export default LoginButtonWelcome;

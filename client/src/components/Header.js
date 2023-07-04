@@ -1,35 +1,31 @@
 import Navigator from "./Navigator.js";
 import styled from "styled-components";
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
+import { UserContext } from "../context/UserContext.js";
 import LoginButton from "./Login/LoginButton.js";
 import LogoutButton from "./Login/LogoutButton.js";
+import { useNavigate } from "react-router-dom";
+import SearchBar from "./SarchBar.js";
+import Burger from "./Burger.js";
+
 
 const Header = () => {
 
-
-    // useEffect(() => {
-
-    //     window.addEventListener('scroll', scrollHandle);
-            
-    //     return ()=>{window.removeEventListener('scroll', scrollHandle)}
-
-    // });
+    const { currentUser } = useContext(UserContext);
+    const Navigate = useNavigate()
 
     return (
         <StyledHeader>
-            {/* <SearchBar/> */}
-            <Navigator/>
-
-            <LoginButton/>
-            <LogoutButton/>
+            {!currentUser ? <PlaceholderDiv></PlaceholderDiv>: <StyledImage src={currentUser.picture} onClick={() => {Navigate("/profile")}}/>}          
+            <Burger/>
+            <SearchBar/>
+            {/* <Navigator/> */}
+            {!currentUser ? <LoginButton/> :
+            <LogoutButton/>}
         </StyledHeader>
     )
 };
 
-// when width < x make a ball for the navigators (hamburger)
-// create a on/off button for the darkmode => change text and background colors when clicked
-// dark mode on the right side of the navbar
-// make the header sticky and fade when on top
 const StyledHeader = styled.header`
     width: 100%;
     margin-left: auto;
@@ -39,10 +35,19 @@ const StyledHeader = styled.header`
     justify-content: space-around;
     align-items: center;
     transition: all 0.7s ease-in-out;
-    background-color: ${( {isTransparent} ) => isTransparent ? `none` : `var(--header-bg-color)`};
+    background-color: rgba(0,0,0,0.8);
     position: fixed;
     z-index: 10;
 `;
 
+const PlaceholderDiv = styled.div`
+    width: 2.5em;
+    height: 2.5em;
+`
 
+const StyledImage = styled.img`
+    border-radius: 50%;
+    width: 2.5em;
+    height: 2.5em;
+`
 export default Header;
