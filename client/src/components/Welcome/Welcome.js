@@ -72,10 +72,10 @@ const ContinueButton = styled(NavLink)`
   padding: 0 2em;
   border: none;
   border-radius:0.5em;
-  transition: 0.5s ease-in-out;
+  transition: 0.3s ease-in-out;
 
   &:hover{
-    scale: 1.25;
+    scale: 1.10;
   }
 `;
 

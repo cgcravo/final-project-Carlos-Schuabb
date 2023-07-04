@@ -20,6 +20,7 @@ const Burger = () => {
               <Item to = "/new-bloco">New Bloco</Item>
               <Item to = "/my-blocos">My Blocos</Item>
               <Item to = "/favorite-blocos">Favorites</Item>
+              <Item to = "/about">About</Item>
           </ul>
           <XButton onClick={() => {setOpen(false)}}>x</XButton>
       </Menu>

@@ -25,6 +25,9 @@ const Input = styled.input`
   text-align: center;
   &:hover, :active{
     border: none;
+  }
+  &:focus{
+    border: none;
     outline: 0.03em solid blue;
   }
 `;
