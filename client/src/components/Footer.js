@@ -12,7 +12,7 @@ const Footer = () => {
         <FaInstagramSquare className="icon"/>
       </MediaIcons>
       <RightsContainer>
-        <FaCopyright className="icon"/><p>2023 Carlos Schuabb. All rights reserved.</p>
+        <FaCopyright className="icon"/><RightsText>2023 Carlos Schuabb. All rights reserved.</RightsText>
       </RightsContainer>
     </StyledFooter>
   )
@@ -34,7 +34,7 @@ const StyledFooter = styled.footer`
 `
 
 const MediaIcons = styled.div`
-  margin: 1em 0;
+  margin: 0.5em 0;
 `
 
 const RightsContainer = styled.div`
@@ -42,5 +42,9 @@ const RightsContainer = styled.div`
   flex-direction: row;
   align-items: center;
 `
+const RightsText = styled.p`
+  font-size: 1em;
+`
+
 
 export default Footer;

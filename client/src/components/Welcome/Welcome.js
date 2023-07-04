@@ -1,8 +1,18 @@
-import LoginButtonWelcome from "../Login/LoginButton";
+import LoginButtonWelcome from "../Login/LoginButtonWelcome";
 import styled from "styled-components";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../../context/UserContext";
 
 const Welcome = () => {
+
+  const { currentUser } = useContext(UserContext);
+  const Navigate = useNavigate()
+  console.log(currentUser)
+
+  if(currentUser){
+    Navigate("/home")
+  }
 
   return <>
   <ContentContainer>
@@ -25,7 +35,7 @@ const ContentContainer = styled.div`
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  background-image: url("assets/DSC_3573.JPG");
+  background-image: url("client/assets/DSC_3573.JPG");
 `
 
 const TextContainer = styled.div`
@@ -62,12 +72,11 @@ const ContinueButton = styled(NavLink)`
   padding: 0 2em;
   border: none;
   border-radius:0.5em;
+  transition: 0.5s ease-in-out;
 
   &:hover{
-      outline: 0.05em solid black;
+    scale: 1.25;
   }
 `;
-
-
 
 export default Welcome;
