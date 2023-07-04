@@ -55,7 +55,6 @@ const FindAll = () => {
   return <>
     <Header/>
     <Main>
-    <p>This is the FindAll page</p>
 
     <MapApp className="Map-App">
       {!isLoaded ? (
