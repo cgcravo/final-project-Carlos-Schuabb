@@ -12,7 +12,6 @@ const Container = styled.main`
   position: absolute;
   top: 5em;
   background-color: white;
-  min-height: 80vh;
   
   @media only screen and (max-width: 500px) {
   background-color: red;

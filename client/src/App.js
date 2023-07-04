@@ -2,9 +2,6 @@ import React from "react";
 import GlobalStyles from "./GlobalStyles";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 
-import Header from "./components/Header";
-import Main from "./components/Main";
-import Footer from "./components/Footer";
 import Welcome from "./components/Welcome/Welcome";
 import Home from "./components/Home/Home";
 import UserProfile from "./components/Profile/UsersProfile";
@@ -16,13 +13,13 @@ import Mine from "./components/Mine/Mine";
 import Favorites from "./components/Favorites/Favorites";
 
 const App = () => {
+
   return (
     <>
     <GlobalStyles />
     
     <Router>
-        <Header />
-        <Main>
+
         <Routes>
             <Route path="/" element={<Welcome />}/>
             <Route path="/home" element={<Home />}/>
@@ -36,8 +33,6 @@ const App = () => {
             <Route path="/*" element={<Home />} />
             {/* <Route path="*" element={<Error />}/> */}
         </Routes>
-        </Main>
-        <Footer />
     </Router>
     </>
   );
