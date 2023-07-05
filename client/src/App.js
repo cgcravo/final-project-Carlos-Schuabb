@@ -25,7 +25,7 @@ const App = () => {
             <Route path="/home" element={<Home />}/>
             <Route path="/about" element={<About />}/>
             <Route path="/profile" element={<UserProfile />}/>
-            <Route path="/find-a-bloco" element={<FindOne />}/>
+            <Route path="/find-a-bloco/:id" element={<FindOne />}/>
             <Route path="/find-all-blocos" element={<FindAll />}/>
             <Route path="/new-bloco" element={<New />}/>
             <Route path="/my-blocos" element={<Mine />}/>
