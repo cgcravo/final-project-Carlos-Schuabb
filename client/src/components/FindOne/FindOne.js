@@ -5,6 +5,8 @@ import Header from "../Header.js";
 import Main from "../Main.js";
 import Footer from "../Footer.js";
 
+//NEEDS INFOWINDOW
+
 const FindOne = () => {
 
   //useLoadScript: It loads the Google Maps API script
