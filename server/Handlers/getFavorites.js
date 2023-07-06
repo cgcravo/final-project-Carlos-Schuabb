@@ -13,7 +13,7 @@ const options = {
 const getFavorites = async (request, response) => {
 
   //the user id
-  const { _id } = request.body;
+  const { _id } = request.params;
 
   if (!_id) {
     return response.status(400).json({
@@ -37,7 +37,7 @@ const getFavorites = async (request, response) => {
 
     resultGetOne
       ? response.status(200).json({ status: 200, data: favoritesArray })
-      : response.status(404).json({ status: 404, data: "Not Found" });
+      : response.status(404).json({ status: 404, data: "User favorites not Found" });
 
   } catch (err) {
     console.error(err);
