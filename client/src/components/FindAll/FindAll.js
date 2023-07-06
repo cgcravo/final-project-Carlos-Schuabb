@@ -1,12 +1,23 @@
 /* global google */
 import { GoogleMap, Marker, useLoadScript, InfoWindow } from "@react-google-maps/api";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import Header from "../Header.js";
 import Main from "../Main.js";
 import Footer from "../Footer.js";
 
 const FindAll = () => {
+
+
+  const [rerender, setRerender] = useState(0);
+  console.log(rerender);
+
+  useEffect(()=>{
+    const timer = setTimeout(()=> {
+      setRerender(rerender +1000)
+    },2000)
+    return ()=>{clearTimeout(timer)}
+  })
 
   //useLoadScript: It loads the Google Maps API script
   const { isLoaded } = useLoadScript({
@@ -26,11 +37,10 @@ const FindAll = () => {
 
   //pass all the blocos data instead of these markers
   const markers = [
-    {  lat: 18.5204, lng: 73.8567 },
-    {  lat: 18.5314, lng: 73.8446 },
-    {  lat: 18.5642, lng: 73.7769 },
+    { name: 1, lat: 18.5204, lng: 73.8567, key:rerender+1 },
+    { name: 2, lat: 18.5314, lng: 73.8446, key:rerender+2},
+    { name: 3, lat: 18.5642, lng: 73.7769 ,key:rerender+3},
   ];
-  console.log(markers)
 
   //INITIAL STATE OF THE MAP
   //Set the reference of the map component
@@ -66,28 +76,34 @@ const FindAll = () => {
       //Set the isOpen state to false to hide the InfoWindow component by clicking anywhere on the map
       onClick={() => setIsOpen(false)}
     >
-      {markers.map(({ lat, lng }, index) => (
+      {markers.map(({ name, lat, lng, key }, index) => (
+
         <Marker
-          key={index}
+          key={key}
+          name={name}
           position={{ lat, lng }}
           onClick={() => {
             handleMarkerClick(lat, lng);
+            setInfoWindowData(index);
+            setIsOpen(true);
           }}
           onLoad={()=>{console.log("Marker has been loaded")}}
         >
-          {isOpen && infoWindowData?.id === index && (
+          {isOpen && infoWindowData === index && (
             //Creates a window with info 
-            <InfoWindow
+            <InfoWindow position={{lat, lng}}
             //By default InfoWindow comes with the close icon on the top right corner
             //Set the isOpen state as false to hide the InfoWindow component by clicking on the close icon
               onCloseClick={() => {
                 setIsOpen(false);
               }}
             >
-              {/* <h3>{infoWindowData.address}</h3> */}
+              <h3>{markers.find((marker, index)=>(index === infoWindowData)).name}</h3>
             </InfoWindow>
           )}
         </Marker>
+
+
       ))}
         </GoogleMap>
       )}
@@ -96,6 +112,7 @@ const FindAll = () => {
     <Footer/>
   </>
 }
+
 
 const MapApp = styled.div`
   height: 100vh;

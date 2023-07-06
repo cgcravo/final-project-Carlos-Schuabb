@@ -1,12 +1,13 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import { styled } from "styled-components"
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { NavLink } from "react-router-dom"
-
+import { UserContext } from "../context/UserContext.js";
 
 const Burger = () => {
 
   const [open, setOpen] = useState(false)
+  const { currentUser } = useContext(UserContext);
 
   return (
   <Container>
@@ -17,9 +18,9 @@ const Burger = () => {
           <ul>
               <Item to = "/home">Home</Item>
               <Item to = "/find-all-blocos">All Blocos</Item>
-              <Item to = "/new-bloco">New Bloco</Item>
-              <Item to = "/my-blocos">My Blocos</Item>
-              <Item to = "/favorite-blocos">Favorites</Item>
+              {currentUser && <Item to = "/new-bloco">New Bloco</Item>}
+              {currentUser &&<Item to = "/my-blocos">My Blocos</Item>}
+              {currentUser &&<Item to = "/favorite-blocos">Favorites</Item>}
               <Item to = "/about">About</Item>
           </ul>
           <XButton onClick={() => {setOpen(false)}}>x</XButton>

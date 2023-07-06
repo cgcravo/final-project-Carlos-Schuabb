@@ -3,6 +3,7 @@ import { styled } from "styled-components";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SuggestionList from "./SuggestionList";
+import data from "./data"
 
 const SearchBar = () => {
 
@@ -23,7 +24,7 @@ const SearchBar = () => {
         <HiMagnifyingGlass size={18} />
       </SubmitButton>
     </StyledForm>
-    <SuggestionList suggestion={suggestion} name={name} handleSelect={handleSelect} categories={categories}/>
+    <SuggestionList suggestion={data.blocos} name={name} handleSelect={handleSelect}/>
     </>
   )
 }

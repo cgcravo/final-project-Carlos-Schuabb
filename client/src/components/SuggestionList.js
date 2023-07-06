@@ -1,28 +1,29 @@
 import styled from "styled-components";
 
-const SuggestionList = ({ suggestion, name, handleSelect, categories }) => {
-  const matchedSuggestions = suggestion.filter((book) => {
-    return book.title.toLowerCase().includes(name.toLowerCase());
+const SuggestionList = ({ suggestion, name, handleSelect }) => {
+
+  const matchedSuggestions = suggestion.filter((bloco) => {
+    return bloco.name.toLowerCase().includes(name.toLowerCase());
   });
 
   return (
     <List>
       {name.length > 1 &&
         matchedSuggestions.map((suggestion) => {
-          const firstHalf = suggestion.title.slice(
+          const firstHalf = suggestion.name.slice(
             0,
             suggestion.title.indexOf(name)
           );
-          const secondHalf = suggestion.title.slice(
+          const secondHalf = suggestion.name.slice(
             suggestion.title.indexOf(name)
           );
 
           return (
             <Item
               key={suggestion.id}
-              onClick={() => handleSelect(suggestion.title)}
+              onClick={() => handleSelect(suggestion.name)}
               onKeyDown={(event) => {
-                event.key === "Enter" && handleSelect(suggestion.title);
+                event.key === "Enter" && handleSelect(suggestion.name);
               }}
               tabIndex={0}
             >
@@ -32,8 +33,8 @@ const SuggestionList = ({ suggestion, name, handleSelect, categories }) => {
                 <Italic>
                   {" "}
                   in{" "}
-                  <span className="category">
-                    {categories[suggestion.categoryId].name}
+                  <span className="address">
+                    {suggestion.address}
                   </span>
                 </Italic>
               </span>
@@ -64,7 +65,7 @@ const Item = styled.li`
 const Italic = styled.span`
   font-style: italic;
 
-  && .category {
+  && .address {
     color: purple;
   }
 `;
