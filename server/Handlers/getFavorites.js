@@ -1,6 +1,3 @@
-/* 
- Retrieves an array of all companies from database
-*/
 
 "use strict";
 const { MongoClient } = require("mongodb");
@@ -14,41 +11,40 @@ const options = {
 };
 
 const getFavorites = async (request, response) => {
-  // const { limit = 24, start = 0 } = request.query;
-  // const client = new MongoClient(MONGO_URI, options);
-  // const parsedLimit = parseInt(limit);
-  // const parsedStart = parseInt(start);
 
-  // try {
-  //   await client.connect();
-  //   const db = client.db("e-commerce");
+  //the user id
+  const { _id } = request.body;
 
-  //   const resultGetAll = await db
-  //     .collection("companies")
-  //     .find()
-  //     .skip(parsedStart)
-  //     .limit(parsedLimit)
-  //     .toArray();
+  if (!_id) {
+    return response.status(400).json({
+      status: 400,
+      messagee: 
+        "Missing ID"
+    });
+  }
 
-  //   // Get the total number of items in the collection
-  //   const totalItems = await db.collection("companies").countDocuments();
+  const client = new MongoClient(MONGO_URI, options);
 
-  //   // Fetch the items with pagination
-  //   resultGetAll
-  //     ? response.status(200).json({
-  //         status: 200,
-  //         totalItems,
-  //         start: parsedStart,
-  //         limit: parsedLimit,
-  //         data: resultGetAll,
-  //       })
-  //     : response.status(404).json({ status: 404, data: "Not Found" });
-  // } catch (err) {
-  //   console.error(err);
-  //   response.status(500).json({ status: 500, data: "Server error" });
-  // } finally {
-  //   client.close();
-  // }
+  try {
+    await client.connect();
+    const db = client.db("find-my-bloco");
+
+    const resultGetOne = await db
+      .collection("favorites")
+      .findOne({ _id: _id.toLowerCase() });
+
+    const favoritesArray = resultGetOne.favorites
+
+    resultGetOne
+      ? response.status(200).json({ status: 200, data: favoritesArray })
+      : response.status(404).json({ status: 404, data: "Not Found" });
+
+  } catch (err) {
+    console.error(err);
+    response.status(500).json({ status: 500, data: "Server error" });
+  } finally {
+    client.close();
+  }
 };
 
 module.exports = { getFavorites };
