@@ -15,7 +15,7 @@ router.get("/blocos", getAllBlocos);
 router.get("/blocos/:_id", getOneBloco);
 router.patch("/new-favorite", addToFavorites);
 router.get("/favorites", getFavorites);
-router.patch("/favorites/:_id", deleteFavorite);
+router.patch("/favorites", deleteFavorite);
 
 
 module.exports = router;

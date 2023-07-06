@@ -1,7 +1,6 @@
 //this component will be used inside a marker Infowindow
 
 "use strict";
-//latest version tested and working
 const { MongoClient } = require("mongodb");
 
 require("dotenv").config();
@@ -13,6 +12,7 @@ const options = {
 };
 
 const addToFavorites = async (request, response) => {
+  
   //_id is the user "sub", which is also the favorite object _id (each user has one favorite object)
   //name is the bloco's name (and _id)
   const { _id, name } = request.body;
@@ -70,7 +70,7 @@ const addToFavorites = async (request, response) => {
       } else if (!resultAddNewItem.modifiedCount) {
         response.status(409).json({
           status: 409,
-          message: "Modification equal to pre-existent data",
+          message: "Bloco already in the user's favorites 1",
         });
       } else {
         response
@@ -80,7 +80,7 @@ const addToFavorites = async (request, response) => {
     } else if (containsBloco) {
       response
         .status(409)
-        .json({ status: 409, message: "Bloco already in the user's favorites" });
+        .json({ status: 409, message: "Bloco already in the user's favorites 2" });
     }
   } catch (err) {
     (err) => console.log(err);
