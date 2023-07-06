@@ -1,4 +1,4 @@
-import Navigator from "./Navigator.js";
+import Navigator from "./Navigator.js";//maybe not
 import styled from "styled-components";
 import React, { useContext } from "react";
 import { UserContext } from "../context/UserContext.js";
@@ -19,7 +19,7 @@ const Header = () => {
             {!currentUser ? <PlaceholderDiv></PlaceholderDiv>: <StyledImage src={currentUser.picture} onClick={() => {Navigate("/profile")}}/>}          
             <Burger/>
             <SearchBar/>
-            {/* <Navigator/> */}
+            {/* <Navigator/> maybe not*/}
             {!currentUser ? <LoginButton/> :
             <LogoutButton/>}
         </StyledHeader>

@@ -14,7 +14,7 @@ router.post("/new-bloco", addBloco);
 router.get("/blocos", getAllBlocos);
 router.get("/blocos/:_id", getOneBloco);
 router.patch("/new-favorite", addToFavorites);
-router.get("/favorites", getFavorites);
+router.get("/favorites/:_id", getFavorites);
 router.patch("/favorites", deleteFavorite);
 
 
