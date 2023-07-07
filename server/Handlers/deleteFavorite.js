@@ -14,7 +14,6 @@ const deleteFavorite = async (request, response) => {
   //_id is the user "sub", which is also the favorite object _id
   //name is the bloco's name (and _id)
   const { _id, name } = request.body;
-  console.log(_id, name)
 
   if (!_id || !name) {
     return response
@@ -31,14 +30,13 @@ const deleteFavorite = async (request, response) => {
   const lowerCaseName = name.toLowerCase();
 
   const client = new MongoClient(MONGO_URI, options);
-  console.log("client created")
+
   try {
     await client.connect();
-    console.log("client connected")
     const db = client.db("find-my-bloco");
 
     const resultUserFavoritesObject = await db.collection("favorites").findOne({ _id: _id });
-    console.log("got user")
+
     if (!resultUserFavoritesObject) {
       return response.status(404).json({ status: 404, message: "User's favorite not found" })
     }

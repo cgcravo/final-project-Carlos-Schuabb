@@ -34,7 +34,6 @@ const Favorites = () => {
       .then((parse) => {
         if (parse.status === 200) {
           setUserFavorites(parse.data);
-          console.log(parse.data)
         }
       })
       .catch((error) => {
