@@ -25,7 +25,7 @@ const addToFavorites = async (request, response) => {
         data: {
           name: name || "Missing name",
           _id: _id || "Missing user ID",
-        },
+        }
       });
   }
 

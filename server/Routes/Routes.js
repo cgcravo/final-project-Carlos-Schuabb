@@ -15,7 +15,7 @@ const { deleteBloco } = require("../Handlers/deleteBloco");
 router.post("/new-bloco", addBloco);
 router.get("/blocos", getAllBlocos);
 router.get("/blocos/:_id", getOneBloco);
-router.get("/my-blocos", getUserBlocos);
+router.get("/my-blocos/:_id", getUserBlocos);
 router.delete("/delete-bloco", deleteBloco);
 router.patch("/new-favorite", addToFavorites);
 router.get("/favorites/:_id", getFavorites);

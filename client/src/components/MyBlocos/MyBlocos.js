@@ -12,38 +12,38 @@ const MyBlcos = () => {
   const { currentUser } = useContext(UserContext);
   const [userBlocos, setUserBlocos] = useState(null);
   const Navigate = useNavigate();
+
   useEffect(()=>{
     if(!currentUser){
       Navigate("/Home")
     }
   },[])
 
-  // const fetchUserBlocos = async () => {
+  const fetchUserBlocos = async () => {
 
-  //   const stringSub = currentUser.sub.toString()
+    const stringSub = currentUser.sub.toString()
 
-  //   fetch(`/favorites/${stringSub}`, {
-  //     method: "GET",
-  //     headers: {
-  //       Accept: "application/json",
-  //       "Content-Type": "application/json",
-  //     },
-  //   })
-  //     .then((response) => response.json())
-  //     .then((parse) => {
-  //       if (parse.status === 200) {
-  //         setUserFavorites(parse.data);
-  //         console.log(parse.data)
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       window.alert(error);
-  //     });
-  // };
+    fetch(`/my-blocos/${stringSub}`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      }
+    })
+      .then((response) => response.json())
+      .then((parse) => {
+        if (parse.status === 200) {
+          setUserBlocos(parse.data);
+        }
+      })
+      .catch((error) => {
+        window.alert(error);
+      });
+  };
 
   useEffect(() => {
     if (currentUser) {
-      // fetchFavorites();
+      fetchUserBlocos();
     }
   }, []);
 
@@ -53,28 +53,29 @@ const MyBlcos = () => {
 
   const deleteHandler = (blocoId)=> {
 
-    const stringSub = currentUser.sub.toString()
-    //blocoId is undefined, why?
-    console.log(blocoId)
-    console.log(stringSub)
-
-    fetch("/favorites", {
-      method: "PATCH",
+    fetch("/delete-bloco", {
+      method: "DELETE",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: {_id: stringSub, name: blocoId},
+      body: { name: blocoId },
     })
       .then((response) => response.json())
       .then((parse) => {
-        if (parse.status === 200) {
-          window.alert(parse.message);
+        if (parse.status === 204) {
+          window.alert("Bloco successfully deleted");
         }
       })
       .catch((error) => {
         window.alert(error);
       });
+  }
+
+  const shareHandler = () => {
+    console.log("stretching goal")
+    //maybe create a context that will receive the bloco to go live and have a timer
+    //every defined time it will fetch the db and update the bloco lat and lng for the users current one
   }
   
   return <>
@@ -89,6 +90,14 @@ const MyBlcos = () => {
 }
 
 const Container =styled.div`
+  padding-top: 2em;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
 `
 
 export default MyBlcos;

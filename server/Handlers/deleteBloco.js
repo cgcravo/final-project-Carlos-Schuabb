@@ -9,53 +9,49 @@ const options = {
   useUnifiedTopology: true,
 };
 
-//delete one of the users blocos
-//TO DO
 const deleteBloco = async (request, response) => {
 
-  //_id is the user "sub", which is also the favorite object _id
   //name is the bloco's name (and _id)
-  const { _id, name } = request.body;
-  console.log(_id, name)
+  const { name } = request.body;
 
-  if (!_id || !name) {
+  if (!name) {
     return response
       .status(400)
       .json({
         status: 400,
-        data: {
-          name: name || "Missing name",
-          _id: _id || "Missing user ID",
-        },
+        message:"Missing bloco name"
       });
   }
 
   const lowerCaseName = name.toLowerCase();
 
   const client = new MongoClient(MONGO_URI, options);
-  console.log("client created")
+
   try {
     await client.connect();
-    console.log("client connected")
-    const db = client.db("find-my-bloco");
 
-    const resultUserFavoritesObject = await db.collection("favorites").findOne({ _id: _id });
-    console.log("got user")
-    if (!resultUserFavoritesObject) {
-      return response.status(404).json({ status: 404, message: "User's favorite not found" })
-    }
+  const db = client.db("find-my-bloco");
 
-    const resultUpdate = await db.collection("favorites").updateOne({ _id: _id }, {
-      $pull: {
-          favorites: lowerCaseName
-      }
-  });
+  //remove the bloco from the blocos collection
+  const resultDelete = await db.collection("blocos").deleteOne({_id: lowerCaseName});
 
-  if(!resultUpdate.matchedCount){
-    response.status(404).json({ status: 404, message: "User not found" })
-  } else if (!resultUpdate.modifiedCount) {
-    response.status(409).json({ status: 409, message: "Nothing changed" });
-  } else { response.status(200).json({status:200, message: "Favorites successfully modified"}) };
+  if(!resultDelete.deletedCount){
+    response.status(404).json({ status: 404, message: "No bloco found" })
+  } else {
+
+    //also need to remove from every users favorites
+    const resultRemoveFromFavorites = await db.collection("favorites").updateMany(
+      { },
+      { $pull: { favorites: lowerCaseName } }
+    )
+    
+    if(!resultRemoveFromFavorites.matchedCount){
+      response.status(404).json({ status: 404, message: "Bloco not found" })
+    } else if (!resultRemoveFromFavorites.modifiedCount) {
+      response.status(409).json({ status: 409, message: "Nothing changed" });
+    } response.sendStatus(204)
+
+  }
   
 } catch (err) {
     console.log(err);
