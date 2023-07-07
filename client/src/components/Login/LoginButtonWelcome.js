@@ -27,6 +27,11 @@ const StyledButton = styled.button`
   &:hover{
     scale: 1.10;
   }
+
+  @media only screen and (min-width: 550px) {
+    width: 10em;
+    padding: 0;
+  }
 `;
 
 export default LoginButtonWelcome;

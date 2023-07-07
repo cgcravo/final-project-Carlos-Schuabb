@@ -14,7 +14,6 @@ const Container = styled.main`
   background-color: white;
   
   @media only screen and (max-width: 500px) {
-  background-color: red;
   
 }
 `

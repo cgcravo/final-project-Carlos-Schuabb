@@ -6,13 +6,16 @@ const FavoritesList = ({ userFavorites, goToHandler, deleteHandler}) => {
   return(
     <>
     {userFavorites.map((favorite) => {
-      <Favorite>
+      
+      return (
+      <Favorite key={favorite}>
         <h2>{favorite}</h2>
         <ButtonsContainer>
           <GoButton value={favorite} onClick={(event)=>goToHandler(event.target.value)}>Go!</GoButton>
-          <CiCircleRemove value={favorite} size={18} onClick={(event)=>deleteHandler(event.target.value)}/>
+          <StyledCiCircleRemove value={favorite} size={30} onClick={(event)=>deleteHandler(event.target.value)}/>
         </ButtonsContainer>
       </Favorite>
+      )
     })}
     </>
   )
@@ -26,14 +29,16 @@ const Favorite = styled.div`
   border-radius: 5px;
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
+  box-shadow:10px 5px 5px gray;
 
-  &h2{
-    font-size: 2em;
-    font-weight: 600;
+  & h2{
+    font-size: 1.5;
     color: black;
+    padding-left: 1em;
   }
+
 `;
 
 const ButtonsContainer = styled.div`
@@ -42,11 +47,36 @@ const ButtonsContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content:space-evenly;
+  transition: 0.1s ease-in-out;
+
+`
+
+const StyledCiCircleRemove = styled(CiCircleRemove)`
+  color: red;
+  transition: 0.1s ease-in-out;
+
+  & :hover, :active{
+    scale: 1.10;
+    cursor: pointer;
+  }
 `
 
 const GoButton = styled.button`
-  width: 2em;
+  font-family: var(--main-font-family);
   height: 2em;
+  color: black;
+  text-decoration: none;
+  text-align: center;
+  font-size: 1em;
+  border-radius:1em;
+  border: 1px solid black;
+  transition: 0.5s ease-in-out;
+  box-shadow:2px 2px 5px gray;
+
+  & :hover, :active{
+    scale: 1.10;
+    cursor: pointer;
+  }
 `
 
 export default FavoritesList;

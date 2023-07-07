@@ -24,7 +24,7 @@ const SearchBar = () => {
         <HiMagnifyingGlass size={18} />
       </SubmitButton>
     </StyledForm>
-    <SuggestionList suggestion={data.blocos} name={name} handleSelect={handleSelect}/>
+    {/* <SuggestionList suggestion={data.blocos} name={name} handleSelect={handleSelect}/> */}
     </>
   )
 }
