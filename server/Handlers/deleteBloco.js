@@ -12,14 +12,15 @@ const options = {
 const deleteBloco = async (request, response) => {
 
   //name is the bloco's name (and _id)
-  const { name } = request.body;
+  const { _id, name } = request.body;
+  console.log(_id)
 
-  if (!name) {
+  if (!_id || !name) {
     return response
       .status(400)
       .json({
         status: 400,
-        message:"Missing bloco name"
+        data:{_id: _id || "Missing user ID", name: name || "Missing bloco name"}
       });
   }
 
@@ -45,11 +46,18 @@ const deleteBloco = async (request, response) => {
       { $pull: { favorites: lowerCaseName } }
     )
     
-    if(!resultRemoveFromFavorites.matchedCount){
-      response.status(404).json({ status: 404, message: "Bloco not found" })
-    } else if (!resultRemoveFromFavorites.modifiedCount) {
-      response.status(409).json({ status: 409, message: "Nothing changed" });
-    } response.sendStatus(204)
+    if(!resultRemoveFromFavorites.acknowledged){
+      response.status(404).json({ status: 404, message: "Update favorites didn't work" })
+    } else  {//To change the userBlocos state and rerender the page
+      const resultGetAll = await db.collection("blocos").find({ admId: _id }).toArray();
+      console.log("resultGetAll:", resultGetAll)
+      const usersBlocos = resultGetAll.map((bloco)=>{return bloco._id});
+      console.log("usersBlocos:", usersBlocos)
+      resultGetAll
+      ? response.status(200).json({ status: 200, data: usersBlocos})
+      : response.status(404).json({ status: 404, data: "Not Found" });
+    } 
+    
 
   }
   

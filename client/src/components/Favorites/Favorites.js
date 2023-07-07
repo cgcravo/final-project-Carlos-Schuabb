@@ -54,6 +54,7 @@ const Favorites = () => {
   const deleteHandler = (blocoId)=> {
 
     const stringSub = currentUser.sub.toString()
+
     //blocoId is undefined, why?
     console.log(blocoId)
     console.log(stringSub)
@@ -64,12 +65,13 @@ const Favorites = () => {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: {_id: stringSub, name: blocoId},
+      body: JSON.stringify({_id: stringSub, name: blocoId}),
     })
       .then((response) => response.json())
       .then((parse) => {
         if (parse.status === 200) {
           window.alert(parse.message);
+          setUserFavorites(parse.data);
         }
       })
       .catch((error) => {

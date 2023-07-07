@@ -53,18 +53,22 @@ const MyBlcos = () => {
 
   const deleteHandler = (blocoId)=> {
 
+    const stringSub = currentUser.sub.toString()
+
     fetch("/delete-bloco", {
-      method: "DELETE",
+      method: "PATCH",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: { name: blocoId },
+      body: JSON.stringify({ _id:stringSub, name: blocoId }),
     })
       .then((response) => response.json())
       .then((parse) => {
-        if (parse.status === 204) {
+        if (parse.status === 200) {
           window.alert("Bloco successfully deleted");
+          console.log(parse.data)
+          setUserBlocos(parse.data)
         }
       })
       .catch((error) => {

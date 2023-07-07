@@ -11,8 +11,8 @@ const FavoritesList = ({ userFavorites, goToHandler, deleteHandler}) => {
       <Favorite key={favorite}>
         <h2>{favorite}</h2>
         <ButtonsContainer>
-          <GoButton value={favorite} onClick={(event)=>goToHandler(event.target.value)}>Go!</GoButton>
-          <StyledCiCircleRemove value={favorite} size={30} onClick={(event)=>deleteHandler(event.target.value)}/>
+          <GoButton onClick={()=>goToHandler(favorite)}>Go!</GoButton>
+          <StyledCiCircleRemove size={30} onClick={()=>deleteHandler(favorite)}/>
         </ButtonsContainer>
       </Favorite>
       )
