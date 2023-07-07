@@ -1,5 +1,5 @@
 /* global google */
-import { GoogleMap, Marker, useLoadScript, InfoWindow } from "@react-google-maps/api";
+import { GoogleMap, MarkerF, useLoadScript, InfoWindow } from "@react-google-maps/api";
 import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import Header from "../Header.js";
@@ -8,17 +8,7 @@ import Footer from "../Footer.js";
 
 const FindAll = () => {
 
-
   const[allBlocos, setAllBlocos] = useState(null);
-
-  const [rerender, setRerender] = useState(0);
-
-  useEffect(()=>{
-    const timer = setTimeout(()=> {
-      setRerender(rerender +1000)
-    },2000)
-    return ()=>{clearTimeout(timer)}
-  })
 
   useEffect(() => {
     fetch(`/blocos`, {
@@ -44,8 +34,6 @@ const FindAll = () => {
     googleMapsApiKey: "AIzaSyBpjW_xSBCDcTSRuu5wpJ5mnIj_YpHwVAE"
   });
 
-  const center = useMemo(() => ({ lat: 18.52043, lng: 73.856743 }), []);
-
   //mapRef: Stores the reference of the map component
   const [mapRef, setMapRef] = useState();
 
@@ -54,13 +42,6 @@ const FindAll = () => {
 
   //infoWindowData: Stores the necessary data of a specific marker
   const [infoWindowData, setInfoWindowData] = useState();
-
-  //creating a marker for each bloco
-  let markers = null;
-  if(allBlocos){
-  markers = allBlocos.map((bloco, index)=>{
-    return {name: bloco._id, lat: bloco.lat, lng: bloco.lng, address: bloco.address, admName: bloco.adm.Name, key:rerender + index}
-  })}
   
   //INITIAL STATE OF THE MAP
   //Set the reference of the map component
@@ -68,7 +49,7 @@ const FindAll = () => {
   const onMapLoad = (map) => {
     setMapRef(map);
     const bounds = new google.maps.LatLngBounds();
-    markers?.forEach(({ lat, lng }) => bounds.extend({ lat, lng }));
+    allBlocos?.forEach((bloco) => bounds.extend({ lat: bloco.lat, lng: bloco.lng }));
     map.fitBounds(bounds);
   };
 
@@ -86,7 +67,7 @@ const FindAll = () => {
     <Header/>
     <Main>
 
-    <MapApp className="Map-App">
+    {allBlocos && <MapApp className="Map-App">
       {!isLoaded ? (
         <h1>Loading...</h1>
       ) : (//Creates the map with all markes and info on click
@@ -96,38 +77,35 @@ const FindAll = () => {
       //Set the isOpen state to false to hide the InfoWindow component by clicking anywhere on the map
       onClick={() => setIsOpen(false)}
     >
-      {markers.map(({ name, lat, lng, key }, index) => (
-
-        <Marker
-          key={key}
-          name={name}
-          position={{ lat, lng }}
+      {allBlocos && allBlocos.map((bloco) => (
+        <MarkerF
+          key={bloco._id}
+          name={bloco.name}
+          position={{ lat: bloco.lat, lng: bloco.lng }}
           onClick={() => {
-            handleMarkerClick(lat, lng);
-            setInfoWindowData(index);
+            handleMarkerClick(bloco.lat, bloco.lng);
+            setInfoWindowData(bloco._id);
             setIsOpen(true);
           }}
           onLoad={()=>{console.log("Marker has been loaded")}}
         >
-          {isOpen && infoWindowData === index && (
+          {isOpen && infoWindowData === bloco._id && (
             //Creates a window with info 
-            <InfoWindow position={{lat, lng}}
+            <InfoWindow position={{lat: bloco.lat, lng: bloco.lng}}
             //By default InfoWindow comes with the close icon on the top right corner
             //Set the isOpen state as false to hide the InfoWindow component by clicking on the close icon
               onCloseClick={() => {
                 setIsOpen(false);
               }}
             >
-              <h3>{markers.find((marker, index)=>(index === infoWindowData)).name}</h3>
+              <h3>{allBlocos.find((bloco)=>(bloco._id === infoWindowData)).name}</h3>
             </InfoWindow>
           )}
-        </Marker>
-
-
+        </MarkerF>
       ))}
         </GoogleMap>
       )}
-    </MapApp>
+    </MapApp>}
     </Main>
     <Footer/>
   </>

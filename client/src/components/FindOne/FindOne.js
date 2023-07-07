@@ -1,5 +1,5 @@
 /* global google */
-import { GoogleMap, Marker, useLoadScript, InfoWindow } from "@react-google-maps/api";
+import { GoogleMap, MarkerF, useLoadScript, InfoWindow } from "@react-google-maps/api";
 import { useMemo, useEffect, useState } from "react";
 import styled from "styled-components";
 import Header from "../Header.js";
@@ -57,7 +57,7 @@ const FindOne = () => {
           center={new google.maps.LatLng(lat, lng)}
           zoom={12}
         >
-          <Marker position={new google.maps.LatLng(lat, lng)} />
+          <MarkerF position={new google.maps.LatLng(lat, lng)} />
         </GoogleMap>
       )}
     </MapApp>
