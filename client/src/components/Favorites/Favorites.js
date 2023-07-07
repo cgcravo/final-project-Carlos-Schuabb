@@ -48,7 +48,7 @@ const Favorites = () => {
   }, []);
 
   const goToHandler = (blocoId) => {
-    Navigate(`/finda-a-bloco/${blocoId}`)
+    Navigate(`/find-a-bloco/${blocoId}`)
   };
 
   const deleteHandler = (blocoId)=> {

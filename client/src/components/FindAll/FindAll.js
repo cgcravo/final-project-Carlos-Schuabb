@@ -9,8 +9,9 @@ import Footer from "../Footer.js";
 const FindAll = () => {
 
 
+  const[allBlocos, setAllBlocos] = useState(null);
+
   const [rerender, setRerender] = useState(0);
-  console.log(rerender);
 
   useEffect(()=>{
     const timer = setTimeout(()=> {
@@ -18,6 +19,25 @@ const FindAll = () => {
     },2000)
     return ()=>{clearTimeout(timer)}
   })
+
+  useEffect(() => {
+    fetch(`/blocos`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      }
+    })
+      .then((response) => response.json())
+      .then((parse) => {
+        if (parse.status === 200) {
+          setAllBlocos(parse.data);
+        }
+      })
+      .catch((error) => {
+        window.alert(error);
+      });
+  }, []);
 
   //useLoadScript: It loads the Google Maps API script
   const { isLoaded } = useLoadScript({
@@ -35,13 +55,13 @@ const FindAll = () => {
   //infoWindowData: Stores the necessary data of a specific marker
   const [infoWindowData, setInfoWindowData] = useState();
 
-  //pass all the blocos data instead of these markers
-  const markers = [
-    { name: 1, lat: 18.5204, lng: 73.8567, key:rerender+1 },
-    { name: 2, lat: 18.5314, lng: 73.8446, key:rerender+2},
-    { name: 3, lat: 18.5642, lng: 73.7769 ,key:rerender+3},
-  ];
-
+  //creating a marker for each bloco
+  let markers = null;
+  if(allBlocos){
+  markers = allBlocos.map((bloco, index)=>{
+    return {name: bloco._id, lat: bloco.lat, lng: bloco.lng, address: bloco.address, admName: bloco.adm.Name, key:rerender + index}
+  })}
+  
   //INITIAL STATE OF THE MAP
   //Set the reference of the map component
   //Set a default view of the map (all selected markers in the area )
