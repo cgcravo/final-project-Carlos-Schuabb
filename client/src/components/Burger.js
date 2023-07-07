@@ -3,6 +3,7 @@ import { styled } from "styled-components"
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { NavLink } from "react-router-dom"
 import { UserContext } from "../context/UserContext.js";
+import { CiCircleRemove } from "react-icons/ci";
 
 const Burger = () => {
 
@@ -23,7 +24,7 @@ const Burger = () => {
               {currentUser &&<Item to = "/favorite-blocos">Favorites</Item>}
               <Item to = "/about">About</Item>
           </ul>
-          <XButton onClick={() => {setOpen(false)}}>x</XButton>
+          <StyledCiCircleRemove size={40} onClick={() => {setOpen(false)}}/>
       </Menu>
   </Container>
   )
@@ -76,20 +77,19 @@ const Item = styled(NavLink)`
     border-bottom: 0.05em solid rgba(254,254,254,0.5);
   }
 `
-const XButton = styled.button`
+
+const StyledCiCircleRemove = styled(CiCircleRemove)`
   position: absolute;
   top: 1em;
   right: 1em;
   z-index: 10;
-  font-size: 2.5em;
-  color: white;
-  border: none;
+  color: white; 
   background-color: rgba(0,0,0,0.001);
+  transition: 0.1s ease-in-out;
 
-  &:hover, :active{
-    scale: 1.25;
+  & :hover, :active{
+    scale: 1.30;
     cursor: pointer;
-    border-bottom: 0.05em solid rgba(254,254,254,0.5);
   }
 `
 
