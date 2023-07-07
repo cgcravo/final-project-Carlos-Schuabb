@@ -47,11 +47,18 @@ const deleteFavorite = async (request, response) => {
       }
   });
 
+  let favoritesArray = resultUserFavoritesObject.favorites;
+  let index = favoritesArray.indexOf(lowerCaseName);
+  if(index != -1) {
+    favoritesArray.splice(index, 1);
+  }
+
+
   if(!resultUpdate.matchedCount){
     response.status(404).json({ status: 404, message: "User not found" })
   } else if (!resultUpdate.modifiedCount) {
     response.status(409).json({ status: 409, message: "Nothing changed" });
-  } else { response.status(200).json({status:200, message: "Favorites successfully modified"}) };
+  } else { response.status(200).json({status:200, message: "Favorites successfully modified", data: favoritesArray}) };
   
 } catch (err) {
     console.log(err);

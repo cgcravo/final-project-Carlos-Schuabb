@@ -11,9 +11,9 @@ const MyBlcosList = ({ userBlocos, goToHandler, deleteHandler, shareHandler}) =>
       <MyBloco key={bloco}>
         <h2>{bloco}</h2>
         <ButtonsContainer>
-          <ShareLocationButton value={bloco} onClick={(event)=>shareHandler(event.target.value)}>Share</ShareLocationButton>
-          <GoButton value={bloco} onClick={(event)=>goToHandler(event.target.value)}>Go!</GoButton>
-          <StyledCiCircleRemove value={bloco} size={30} onClick={(event)=>deleteHandler(event.target.value)}/>
+          <ShareLocationButton onClick={()=>shareHandler(bloco)}>Share</ShareLocationButton>
+          <GoButton onClick={()=>goToHandler(bloco)}>Go!</GoButton>
+          <StyledCiCircleRemove size={30} onClick={()=>deleteHandler(bloco)}/>
         </ButtonsContainer>
       </MyBloco>
       )
