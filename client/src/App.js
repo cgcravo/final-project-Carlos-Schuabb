@@ -9,7 +9,7 @@ import About from "./components/About/About";
 import FindOne from "./components/FindOne/FindOne";
 import FindAll from "./components/FindAll/FindAll";
 import New from "./components/New/New";
-import Mine from "./components/Mine/Mine";
+import MyBlocos from "./components/MyBlocos/MyBlocos";
 import Favorites from "./components/Favorites/Favorites";
 
 const App = () => {
@@ -28,7 +28,7 @@ const App = () => {
             <Route path="/find-a-bloco/:id" element={<FindOne />}/>
             <Route path="/find-all-blocos" element={<FindAll />}/>
             <Route path="/new-bloco" element={<New />}/>
-            <Route path="/my-blocos" element={<Mine />}/>
+            <Route path="/my-blocos" element={<MyBlocos />}/>
             <Route path="/favorite-blocos" element={<Favorites />}/>
             <Route path="/*" element={<Home />} />
             {/* <Route path="*" element={<Error />}/> */}

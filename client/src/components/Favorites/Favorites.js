@@ -11,7 +11,6 @@ const Favorites = () => {
 
   const { currentUser } = useContext(UserContext);
   const [userFavorites, setUserFavorites] = useState(null);
-  console.log(userFavorites)
 
   const Navigate = useNavigate();
   useEffect(()=>{
@@ -23,8 +22,7 @@ const Favorites = () => {
   const fetchFavorites = async () => {
 
     const stringSub = currentUser.sub.toString()
-    console.log(stringSub)
-    console.log(typeof stringSub)
+
     fetch(`/favorites/${stringSub}`, {
       method: "GET",
       headers: {
@@ -56,13 +54,18 @@ const Favorites = () => {
 
   const deleteHandler = (blocoId)=> {
 
+    const stringSub = currentUser.sub.toString()
+    //blocoId is undefined, why?
+    console.log(blocoId)
+    console.log(stringSub)
+
     fetch("/favorites", {
       method: "PATCH",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: {_id: currentUser.sub, name: blocoId},
+      body: {_id: stringSub, name: blocoId},
     })
       .then((response) => response.json())
       .then((parse) => {
@@ -78,10 +81,23 @@ const Favorites = () => {
   return <>
     <Header/>
     <Main>
-      {userFavorites ? <FavoritesList userFavorites={userFavorites} goToHandler={goToHandler} deleteHandler={deleteHandler}/> : <p>Loading...!</p>}
+      <Container>
+        {userFavorites ? <FavoritesList userFavorites={userFavorites} goToHandler={goToHandler} deleteHandler={deleteHandler}/> : <p>Loading...!</p>}
+      </Container>
     </Main>
     <Footer/>
   </>
 }
+
+const Container = styled.div`
+  padding-top: 2em;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
+
 
 export default Favorites;
