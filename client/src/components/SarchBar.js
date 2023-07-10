@@ -3,31 +3,37 @@ import { styled } from "styled-components";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SuggestionList from "./SuggestionList";
-import data from "./data"
+import React, { useContext } from "react";
+import { BlocosNamesContext } from "../context/BlocosNamesContext";
 
 const SearchBar = () => {
 
-  const [name, setName] = useState("")
+  const [name, setName] = useState("");
+  const { blocosNames } = useContext(BlocosNamesContext);
 
   const Navigate = useNavigate()
 
   //CHANGE IT FOR THE RIGHT ID
-  const handleSelect = (suggestion) => {
-    Navigate(`/find-a-bloco/${suggestion}`)
+  const handleSelect = (bloco) => {
+    Navigate(`/find-a-bloco/${bloco}`)
   }
 
   return(
-    <>
+    <Container>
     <StyledForm>
-      <Input placeholder="Find a Bloco!" type="text" value={name} onChange={(ev) => {setName(ev.target.value)}} onKeyDown={(ev) => {ev.key === "Enter" && handleSelect(ev.target.value)}}/>
-      <SubmitButton type="submit">
-        <HiMagnifyingGlass size={18} />
-      </SubmitButton>
+    <Input placeholder="Find a Bloco!" type="text" value={name} onChange={(ev) => {setName(ev.target.value)}} onKeyDown={(ev) => {ev.key === "Enter" && handleSelect(ev.target.value)}}/>
+    <SubmitButton type="submit">
+      <HiMagnifyingGlass size={18} />
+    </SubmitButton>
     </StyledForm>
-    {/* <SuggestionList suggestion={data.blocos} name={name} handleSelect={handleSelect}/> */}
-    </>
+    {blocosNames && <SuggestionList suggestion={blocosNames} name={name} handleSelect={handleSelect}/>}
+    </Container>
   )
 }
+
+const Container = styled.div`
+  /* width: 50vw; */
+`
 
 const StyledForm = styled.form`
   display: flex;

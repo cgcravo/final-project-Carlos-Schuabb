@@ -10,6 +10,8 @@ const { getFavorites } = require("../Handlers/getFavorites");
 const { deleteFavorite } = require("../Handlers/deleteFavorite");
 const { getUserBlocos } = require("../Handlers/getUserBlocos");
 const { deleteBloco } = require("../Handlers/deleteBloco");
+const { getBlocosNames } = require("../Handlers/getBlocosNames");
+const { shareCoordinates } = require("../Handlers/shareCoordinates");
 
 //routes
 router.post("/new-bloco", addBloco);
@@ -20,6 +22,8 @@ router.patch("/delete-bloco", deleteBloco);
 router.patch("/new-favorite", addToFavorites);
 router.get("/favorites/:_id", getFavorites);
 router.patch("/favorites", deleteFavorite);
+router.get("/blocos-names", getBlocosNames);
+router.patch("/share-coordinates", shareCoordinates);
 
 
 module.exports = router;
