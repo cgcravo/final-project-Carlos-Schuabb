@@ -87,7 +87,6 @@ const FindAll = () => {
             setInfoWindowData(bloco._id);
             setIsOpen(true);
           }}
-          onLoad={()=>{console.log("Marker has been loaded")}}
         >
           {isOpen && infoWindowData === bloco._id && (
             //Creates a window with info 

@@ -5,12 +5,16 @@ import MyBlcosList from "./MyBlocosList.js";
 import styled from "styled-components";
 import { useContext, useEffect, useState} from "react";
 import { UserContext } from "../../context/UserContext.js";
+import { BlocosNamesContext } from "../../context/BlocosNamesContext.js";
 import { useNavigate } from "react-router-dom";
 
 const MyBlcos = () => {
 
   const { currentUser } = useContext(UserContext);
+  const { fetchNames } = useContext(BlocosNamesContext);
   const [userBlocos, setUserBlocos] = useState(null);
+  const[lat, setLat] = useState(null);
+  const[lng, setLng] = useState(null);
   const Navigate = useNavigate();
 
   useEffect(()=>{
@@ -67,8 +71,8 @@ const MyBlcos = () => {
       .then((parse) => {
         if (parse.status === 200) {
           window.alert("Bloco successfully deleted");
-          console.log(parse.data)
           setUserBlocos(parse.data)
+          fetchNames()
         }
       })
       .catch((error) => {
@@ -76,10 +80,56 @@ const MyBlcos = () => {
       });
   }
 
-  const shareHandler = () => {
-    console.log("stretching goal")
-    //maybe create a context that will receive the bloco to go live and have a timer
-    //every defined time it will fetch the db and update the bloco lat and lng for the users current one
+  //this handler gets the user position and then send it to the database
+  const shareHandler = (blocoId) => {
+    
+    if ("geolocation" in navigator) {
+      //getCurrentPosition gets the user position at that time
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          setLat(lat); //the method didn't allow to do it in 1 line
+          setLng(lng);
+        },
+        (error) => {
+          console.error("Error getting user location:", error);
+        }
+      );
+    } else {
+      // Geolocation is not supported by the browser
+      // give back a fix location (in this case the concordia university coordinates)
+      const lat = 45.49520229274075;
+      const lng = -73.57788271059083;
+      setLat(lat);
+      setLng(lng);
+      console.error("Geolocation is not supported by this browser.");
+    }
+
+    //fetch that updates the latitude and lng
+
+    const stringSub = currentUser.sub.toString()
+
+    fetch("/delete-bloco", {
+      method: "PATCH",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ _id:stringSub, name: blocoId, lat: lat, lng: lng }),
+    })
+      .then((response) => response.json())
+      .then((parse) => {
+        if (parse.status === 200) {
+          window.alert("Bloco successfully deleted");
+
+
+        }
+      })
+      .catch((error) => {
+        window.alert(error);
+      });
+
   }
   
   return <>
