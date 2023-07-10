@@ -80,12 +80,12 @@ const MyBlcos = () => {
       });
   }
 
-  //this handler gets the user position and then send it to the database
-  const shareHandler = (blocoId) => {
-    
+  const getLocation = async () => {
+
     if ("geolocation" in navigator) {
       //getCurrentPosition gets the user position at that time
-      navigator.geolocation.getCurrentPosition(
+      try{ 
+        await navigator.geolocation.getCurrentPosition(
         (position) => {
           const lat = position.coords.latitude;
           const lng = position.coords.longitude;
@@ -96,7 +96,7 @@ const MyBlcos = () => {
           console.error("Error getting user location:", error);
         }
       );
-    } else {
+    } catch (err) {
       // Geolocation is not supported by the browser
       // give back a fix location (in this case the concordia university coordinates)
       const lat = 45.49520229274075;
@@ -104,32 +104,57 @@ const MyBlcos = () => {
       setLat(lat);
       setLng(lng);
       console.error("Geolocation is not supported by this browser.");
-    }
+    }}
 
+  };
+  //this handler gets the user position and then send it to the database
+  const shareHandler = (blocoId) => {
+    
+    getLocation()
+    // if ("geolocation" in navigator) {
+    //   //getCurrentPosition gets the user position at that time
+    //   navigator.geolocation.getCurrentPosition(
+    //     (position) => {
+    //       const lat = position.coords.latitude;
+    //       const lng = position.coords.longitude;
+    //       setLat(lat); //the method didn't allow to do it in 1 line
+    //       setLng(lng);
+    //     },
+    //     (error) => {
+    //       console.error("Error getting user location:", error);
+    //     }
+    //   );
+    // } else {
+    //   // Geolocation is not supported by the browser
+    //   // give back a fix location (in this case the concordia university coordinates)
+    //   const lat = 45.49520229274075;
+    //   const lng = -73.57788271059083;
+    //   setLat(lat);
+    //   setLng(lng);
+    //   console.error("Geolocation is not supported by this browser.");
+    // }
+
+    // console.log(lat, lng, "2")
     //fetch that updates the latitude and lng
-
-    const stringSub = currentUser.sub.toString()
-
-    fetch("/delete-bloco", {
+    
+    fetch("/share-coordinates", {
       method: "PATCH",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ _id:stringSub, name: blocoId, lat: lat, lng: lng }),
+      body: JSON.stringify({name: blocoId, lat: lat, lng: lng }),
     })
       .then((response) => response.json())
       .then((parse) => {
         if (parse.status === 200) {
-          window.alert("Bloco successfully deleted");
-
-
+          window.alert(parse.message);
         }
       })
       .catch((error) => {
         window.alert(error);
       });
-
+    
   }
   
   return <>
