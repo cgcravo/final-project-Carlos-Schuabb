@@ -1,5 +1,7 @@
 "use strict";
 const { MongoClient } = require("mongodb");
+const { getPositionFromAddress } = require("./GetPositionFromAddress");
+const { getAddressFromPosition } = require("./GetAddressFromPosition");
 
 require("dotenv").config();
 const { MONGO_URI } = process.env;
@@ -14,19 +16,30 @@ const addBloco = async (request, response) => {
   //the admId will be the user "sub" created by auth0
   //the admName will be the user "nickname" crated by auth0
   const { name, address, lat, lng, admId, admName } = request.body;
-
-  if (!name || !address || !lat || !lng || !admId || !admName) {
+  console.log(name, address, lat, lng, admId, admName, 1)
+  if (!name || !admId || !admName) {
     return response
       .status(400)
       .json({
         status: 400,
         data: {
           name: name || "Missing name",
+          admId: admId || "Missing admnistrator ID",
+          admName: admName || "Missing admnistrator name",
+        },
+      });
+  }
+
+  //we need or the address or the coordinates
+  if(!address && (!lat && !lng )){
+    return response
+      .status(400)
+      .json({
+        status: 400,
+        data: {
           address: address || "Missing address",
           lat: lat || "Missing latitude",
           lng: lng || "Missing longitude",
-          admId: admId || "Missing admnistrator ID",
-          admName: admName || "Missing admnistrator name",
         },
       });
   }
@@ -35,24 +48,39 @@ const addBloco = async (request, response) => {
     return response.status(400).json({status: 400, message: "Latitude and Longitude must be numbers"})
   }
 
-  //ADD FILTER FOR SPECIAL CARACTERES FOR THE NAME
-
-  const lowerCaseName = name.toLowerCase();
-  const lowerCaseAddress = address.toLowerCase();
-
   const client = new MongoClient(MONGO_URI, options);
 
   try {
+    console.log(2)
     await client.connect();
+    console.log(3)
     const db = client.db("find-my-bloco");
+    console.log(4)
+    let blocoLat = lat;
+    let blocoLng = lng;
+    let newAddress = address;
+
+    if(address){
+      const { lat, lng } = await getPositionFromAddress(address);
+      blocoLat = lat;
+      blocoLng = lng;
+    } else {
+      const address = await getAddressFromPosition(lat, lng);
+      newAddress = address;
+    }
+    console.log(blocoLat, blocoLng, newAddress, 5)
+
+    //ADD FILTER FOR SPECIAL CARACTERES FOR THE NAME if possible
+    const lowerCaseName = name.toLowerCase();
+    const lowerCaseAddress = newAddress.toLowerCase();
 
     // getting the array of items from the user`s cart
     const hasBloco = await db.collection("blocos").findOne({ _id: lowerCaseName });
 
     //if there is no equal bloco, create a new one
     if (!hasBloco) {
-      const newBloco = { _id: lowerCaseName, name: lowerCaseName, address: lowerCaseAddress, lat: lat, lng: lng, admId: admId, admName: admName };
 
+      const newBloco = { _id: lowerCaseName, name: lowerCaseName, address: lowerCaseAddress, lat: blocoLat, lng: blocoLng, admId: admId, admName: admName };
       const resultAddBloco = await db.collection("blocos").insertOne(newBloco);
       
       //testing block
