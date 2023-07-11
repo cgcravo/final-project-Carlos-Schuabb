@@ -5,6 +5,7 @@ import MyBlcosList from "./MyBlocosList.js";
 import styled from "styled-components";
 import { useContext, useEffect, useState} from "react";
 import { UserContext } from "../../context/UserContext.js";
+import { UserLocationContext } from "../../context/UserLocationContext.js";
 import { BlocosNamesContext } from "../../context/BlocosNamesContext.js";
 import { useNavigate } from "react-router-dom";
 
@@ -13,8 +14,8 @@ const MyBlcos = () => {
   const { currentUser } = useContext(UserContext);
   const { fetchNames } = useContext(BlocosNamesContext);
   const [userBlocos, setUserBlocos] = useState(null);
-  const[lat, setLat] = useState(null);
-  const[lng, setLng] = useState(null);
+  const { userLat, userLng } = useContext(UserLocationContext);
+
   const Navigate = useNavigate();
 
   useEffect(()=>{
@@ -23,8 +24,8 @@ const MyBlcos = () => {
     }
   },[])
 
+  //function to fetch the users blocos
   const fetchUserBlocos = async () => {
-
     const stringSub = currentUser.sub.toString()
 
     fetch(`/my-blocos/${stringSub}`, {
@@ -45,18 +46,20 @@ const MyBlcos = () => {
       });
   };
 
+  //get the blocos if user exist
   useEffect(() => {
     if (currentUser) {
       fetchUserBlocos();
     }
   }, []);
 
+  //go to button handler
   const goToHandler = (blocoId) => {
     Navigate(`/find-a-bloco/${blocoId}`)
   };
 
+  //delete button handler
   const deleteHandler = (blocoId)=> {
-
     const stringSub = currentUser.sub.toString()
 
     fetch("/delete-bloco", {
@@ -80,71 +83,19 @@ const MyBlcos = () => {
       });
   }
 
-  const getLocation = async () => {
-
-    if ("geolocation" in navigator) {
-      //getCurrentPosition gets the user position at that time
-      try{ 
-        await navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const lat = position.coords.latitude;
-          const lng = position.coords.longitude;
-          setLat(lat); //the method didn't allow to do it in 1 line
-          setLng(lng);
-        },
-        (error) => {
-          console.error("Error getting user location:", error);
-        }
-      );
-    } catch (err) {
-      // Geolocation is not supported by the browser
-      // give back a fix location (in this case the concordia university coordinates)
-      const lat = 45.49520229274075;
-      const lng = -73.57788271059083;
-      setLat(lat);
-      setLng(lng);
-      console.error("Geolocation is not supported by this browser.");
-    }}
-
-  };
-  //this handler gets the user position and then send it to the database
+  //share button handler
   const shareHandler = (blocoId) => {
     
-    getLocation()
-    // if ("geolocation" in navigator) {
-    //   //getCurrentPosition gets the user position at that time
-    //   navigator.geolocation.getCurrentPosition(
-    //     (position) => {
-    //       const lat = position.coords.latitude;
-    //       const lng = position.coords.longitude;
-    //       setLat(lat); //the method didn't allow to do it in 1 line
-    //       setLng(lng);
-    //     },
-    //     (error) => {
-    //       console.error("Error getting user location:", error);
-    //     }
-    //   );
-    // } else {
-    //   // Geolocation is not supported by the browser
-    //   // give back a fix location (in this case the concordia university coordinates)
-    //   const lat = 45.49520229274075;
-    //   const lng = -73.57788271059083;
-    //   setLat(lat);
-    //   setLng(lng);
-    //   console.error("Geolocation is not supported by this browser.");
-    // }
-
-    // console.log(lat, lng, "2")
+    console.log(userLat, userLng, "2")
     //fetch that updates the latitude and lng
-    
     fetch("/share-coordinates", {
       method: "PATCH",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({name: blocoId, lat: lat, lng: lng }),
-    })
+      body: JSON.stringify({name: blocoId, lat: userLat, lng: userLng }),
+      })
       .then((response) => response.json())
       .then((parse) => {
         if (parse.status === 200) {
@@ -154,14 +105,13 @@ const MyBlcos = () => {
       .catch((error) => {
         window.alert(error);
       });
-    
   }
   
   return <>
     <Header/>
     <Main>
       <Container>
-        {userBlocos ? <MyBlcosList userBlocos={userBlocos} goToHandler={goToHandler} deleteHandler={deleteHandler} shareHandler={shareHandler}/> : <p>Loading...!</p>}
+        {userBlocos ? <MyBlcosList lat={userLat} lng={userLng} userBlocos={userBlocos} goToHandler={goToHandler} deleteHandler={deleteHandler} shareHandler={shareHandler}/> : <p>Loading...!</p>}
       </Container>
     </Main>
     <Footer/>

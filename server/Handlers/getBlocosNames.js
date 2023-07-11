@@ -20,7 +20,6 @@ const getBlocosNames = async (request, response) => {
     await client.connect();
 
     const db = client.db("find-my-bloco");
-    console.log(4)
 
     //not working
     // const blocosNames = await collection("blocos").find({}, { name: 1, _id: 0 }).toArray();

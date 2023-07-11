@@ -15,7 +15,7 @@ const Burger = () => {
       <BurgerContainer onClick={() => {setOpen(!open)}}>
         <GiHamburgerMenu  size = {20} />
       </BurgerContainer>
-      <Menu className={`dropdown-menu ${open ? 'active' : 'inactive'}`}>
+      <Menu className={`${open ? 'active' : 'inactive'}`}>
           <ul>
               <Item to = "/home">Home</Item>
               <Item to = "/find-all-blocos">All Blocos</Item>

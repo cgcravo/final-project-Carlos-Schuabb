@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { CiCircleRemove } from "react-icons/ci";
 
-const MyBlcosList = ({ userBlocos, goToHandler, deleteHandler, shareHandler}) => {
+const MyBlcosList = ({ lat, lng, userBlocos, goToHandler, deleteHandler, shareHandler}) => {
 
   return(
     <>
@@ -11,7 +11,7 @@ const MyBlcosList = ({ userBlocos, goToHandler, deleteHandler, shareHandler}) =>
       <MyBloco key={bloco}>
         <h2>{bloco}</h2>
         <ButtonsContainer>
-          <ShareLocationButton onClick={()=>shareHandler(bloco)}>Share</ShareLocationButton>
+          {lat && lng && <ShareLocationButton onClick={()=>shareHandler(bloco)}>Share</ShareLocationButton>}
           <GoButton onClick={()=>goToHandler(bloco)}>Go!</GoButton>
           <StyledCiCircleRemove size={30} onClick={()=>deleteHandler(bloco)}/>
         </ButtonsContainer>

@@ -31,7 +31,7 @@ const FindOne = () => {
       .catch((error) => {
         window.alert(error);
       });
-  }, []);
+  },[id]);
 
   let lat = null;
   let lng =null; 
