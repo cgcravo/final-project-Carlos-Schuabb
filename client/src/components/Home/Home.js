@@ -1,5 +1,5 @@
 /* global google */
-import { React, useContext, useEffect, useState } from "react";
+import { React, useContext, useEffect} from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { UserContext } from "../../context/UserContext.js";
 import { UserLocationContext } from "../../context/UserLocationContext.js";
@@ -62,7 +62,7 @@ const Home = () => {
 }
 
 const MapApp = styled.div`
-  height: 100vh;
+  height: 90vh;
   width: 100vw;
 
   .map-container {

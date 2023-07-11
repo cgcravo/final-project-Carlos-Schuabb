@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/UserContext.js";
 import { UserLocationContext } from "../../context/UserLocationContext.js";
 import { useNavigate } from "react-router-dom";
-// import { DateTimePicker } from 'react-datetime-picker';//stretch
+import DateTimePicker from 'react-datetime-picker';//stretch
 
 import styled from "styled-components";
 
@@ -13,7 +13,8 @@ const New = () => {
   const { currentUser } = useContext(UserContext);
   const { userLat, userLng } = useContext(UserLocationContext);
   const [radio, setRadio] = useState(null);
-  // const [date, setDate] = useState(new Date());//stretch
+  const [date, setDate] = useState(new Date());//stretch
+
   // const [formData, setFormData] = useState({});//will use when after addig more fields to the form
   const [name, setName] = useState(null);
   const [address, setAddress] = useState(null);
@@ -39,15 +40,13 @@ const New = () => {
 
     let body = {};
     if(radio === "auto"){
-      console.log("this is the radio",radio)
-      body = {name: name, address:"NA", lat: userLat, lng: userLng, admId: currentUser.sub, admName: currentUser.nickname}
+      body = {name: name, address:"NA", lat: userLat, lng: userLng, admId: currentUser.sub, admName: currentUser.nickname, date: date}
     } else if (radio === "manual"){
-      console.log("this is the radio",radio)
-      body = {name: name, address: address, lat: "NA", lng: "NA", admId: currentUser.sub, admName: currentUser.nickname}
+      body = {name: name, address: address, lat: "NA", lng: "NA", admId: currentUser.sub, admName: currentUser.nickname, date: date}
     } else{
-      return window.alert("Select a method");
+      return window.alert("Select location method");
     }
-
+    console.log(body)
     fetch("/new-bloco", {
       method: "POST",
       headers: {
@@ -88,6 +87,11 @@ const New = () => {
               </label>
             </NameContainer>
 
+            <DateTimePicker value={date} onChange={(value) =>{
+                      setDate(value);
+                      }
+                    }/>
+
             <RadioContainer>
               <label htmlFor="auto">
                 Use my location
@@ -118,13 +122,6 @@ const New = () => {
               </label>
             </RadioContainer>
             {/* stretch */}
-{/* 
-            {!radio && (<>
-              <DateTimePicker value={date} onChange={(event) =>{
-                      setDate(event.target.value);
-                      handleChange("date-time", date)}
-                    }/>
-            </>)} */}
 
             {radio === "manual" && (
               <AddressContainer>
