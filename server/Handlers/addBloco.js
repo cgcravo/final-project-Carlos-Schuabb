@@ -16,7 +16,6 @@ const addBloco = async (request, response) => {
   //the admId will be the user "sub" created by auth0
   //the admName will be the user "nickname" crated by auth0
   const { name, address, lat, lng, admId, admName } = request.body;
-  console.log(name, address, lat, lng, admId, admName, 1)
   if (!name || !admId || !admName) {
     return response
       .status(400)
@@ -44,31 +43,29 @@ const addBloco = async (request, response) => {
       });
   }
 
-  if (typeof lat !== "number" || typeof lng !== "number"){
+  if (!address && (typeof lat !== "number" || typeof lng !== "number")){
     return response.status(400).json({status: 400, message: "Latitude and Longitude must be numbers"})
   }
 
   const client = new MongoClient(MONGO_URI, options);
 
   try {
-    console.log(2)
+
     await client.connect();
-    console.log(3)
     const db = client.db("find-my-bloco");
-    console.log(4)
+
     let blocoLat = lat;
     let blocoLng = lng;
     let newAddress = address;
 
-    if(address){
+    if(newAddress !== "NA"){
       const { lat, lng } = await getPositionFromAddress(address);
       blocoLat = lat;
       blocoLng = lng;
-    } else {
-      const address = await getAddressFromPosition(lat, lng);
+    } else if(newAddress === "NA"){
+      const address = await getAddressFromPosition(blocoLat, blocoLng);
       newAddress = address;
     }
-    console.log(blocoLat, blocoLng, newAddress, 5)
 
     //ADD FILTER FOR SPECIAL CARACTERES FOR THE NAME if possible
     const lowerCaseName = name.toLowerCase();
@@ -85,7 +82,7 @@ const addBloco = async (request, response) => {
       
       //testing block
       resultAddBloco
-      ? response.status(201).json({status: 201, data: newBloco})
+      ? response.status(201).json({status: 201, data: newBloco, message:"Bloco successfully created!"})
       : response.status(400).json({ status: 400, message:"Bad request", data: newBloco});
 
     } else if (hasBloco) {

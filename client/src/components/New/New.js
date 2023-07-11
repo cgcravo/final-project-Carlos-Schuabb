@@ -14,8 +14,9 @@ const New = () => {
   const { userLat, userLng } = useContext(UserLocationContext);
   const [radio, setRadio] = useState(null);
   // const [date, setDate] = useState(new Date());//stretch
-  const [formData, setFormData] = useState({});
-  console.log(formData)
+  // const [formData, setFormData] = useState({});//will use when after addig more fields to the form
+  const [name, setName] = useState(null);
+  const [address, setAddress] = useState(null);
 
   const Navigate = useNavigate();
   useEffect(() => {
@@ -24,18 +25,29 @@ const New = () => {
     }
   }, []);
 
-  const handleChange = (key, value) => {
-    setFormData({
-        ...formData,
-        [key]: value
-    })
-}
+  //will use it when add more fields to the form
+  // const handleChange = (key, value) => {
+  //   setFormData({
+  //       ...formData,
+  //       [key]: value
+  //   })
+  // }
 
   const handleSubmit = (event) => {
 
     event.preventDefault()
-    const body = {...formData, lat: userLat, lng: userLng, admId: currentUser.sub, admName: currentUser.nickname}
-    console.log(body)
+
+    let body = {};
+    if(radio === "auto"){
+      console.log("this is the radio",radio)
+      body = {name: name, address:"NA", lat: userLat, lng: userLng, admId: currentUser.sub, admName: currentUser.nickname}
+    } else if (radio === "manual"){
+      console.log("this is the radio",radio)
+      body = {name: name, address: address, lat: "NA", lng: "NA", admId: currentUser.sub, admName: currentUser.nickname}
+    } else{
+      return window.alert("Select a method");
+    }
+
     fetch("/new-bloco", {
       method: "POST",
       headers: {
@@ -46,7 +58,7 @@ const New = () => {
       })
       .then((response) => response.json())
       .then((parse) => {
-        if (parse.status === 200) {
+        if (parse.status === 201) {
           window.alert(parse.message);
         }
       })
@@ -69,7 +81,8 @@ const New = () => {
                   id="name"
                   name="name"
                   onChange={(event) =>
-                    handleChange(event.target.id, event.target.value)
+                    setName(event.target.value)
+                    // handleChange(event.target.id, event.target.value)//will use it when add more fields to the form 
                   }
                 />
               </label>
@@ -122,7 +135,8 @@ const New = () => {
                     id="address"
                     name="address"
                     onChange={(event) =>
-                      handleChange(event.target.id, event.target.value)
+                      setAddress(event.target.value)
+                      // handleChange(event.target.id, event.target.value)//will use it when add more fields to the form 
                     }
                   />
                 </label>
