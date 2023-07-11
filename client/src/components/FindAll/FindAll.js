@@ -1,22 +1,35 @@
 /* global google */
-import { GoogleMap, MarkerF, useLoadScript, InfoWindow } from "@react-google-maps/api";
-import { useEffect, useMemo, useState } from "react";
+import {
+  GoogleMap,
+  MarkerF,
+  useLoadScript,
+  InfoWindowF,
+} from "@react-google-maps/api";
+import { useEffect, useState, useContext } from "react";
+import { UserContext } from "../../context/UserContext.js";
+import { MdOutlineAddLocation } from "react-icons/md";
+import { MdOutlineDone } from "react-icons/md";
 import styled from "styled-components";
 import Header from "../Header.js";
 import Main from "../Main.js";
 import Footer from "../Footer.js";
 
 const FindAll = () => {
-
-  const[allBlocos, setAllBlocos] = useState(null);
-
+  const [allBlocos, setAllBlocos] = useState(null);
+  if(allBlocos){
+    console.log(allBlocos.map(bloco => typeof bloco.date))
+  }
+  const { currentUser } = useContext(UserContext);
+  const [userFavorites, setUserFavorites] = useState();
+  console.log(userFavorites);
+  //get all blocos when mount
   useEffect(() => {
     fetch(`/blocos`, {
       method: "GET",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-      }
+      },
     })
       .then((response) => response.json())
       .then((parse) => {
@@ -29,9 +42,38 @@ const FindAll = () => {
       });
   }, []);
 
+  //function to get the user favorites
+  const getUserFavorites = async () => {
+    const stringSub = currentUser.sub.toString();
+
+    fetch(`/favorites/${stringSub}`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((parse) => {
+        if (parse.status === 200) {
+          setUserFavorites(parse.data);
+        }
+      })
+      .catch((error) => {
+        window.alert(error);
+      });
+  };
+
+  //get the user favorites when mount
+  useEffect(() => {
+    if (currentUser) {
+      getUserFavorites();
+    }
+  }, []);
+
   //useLoadScript: It loads the Google Maps API script
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: "AIzaSyBpjW_xSBCDcTSRuu5wpJ5mnIj_YpHwVAE"
+    googleMapsApiKey: "AIzaSyBpjW_xSBCDcTSRuu5wpJ5mnIj_YpHwVAE",
   });
 
   //mapRef: Stores the reference of the map component
@@ -42,14 +84,16 @@ const FindAll = () => {
 
   //infoWindowData: Stores the necessary data of a specific marker
   const [infoWindowData, setInfoWindowData] = useState();
-  
+
   //INITIAL STATE OF THE MAP
   //Set the reference of the map component
   //Set a default view of the map (all selected markers in the area )
   const onMapLoad = (map) => {
     setMapRef(map);
     const bounds = new google.maps.LatLngBounds();
-    allBlocos?.forEach((bloco) => bounds.extend({ lat: bloco.lat, lng: bloco.lng }));
+    allBlocos?.forEach((bloco) =>
+      bounds.extend({ lat: bloco.lat, lng: bloco.lng })
+    );
     map.fitBounds(bounds);
   };
 
@@ -57,68 +101,180 @@ const FindAll = () => {
   //Set the clicked marker at the center position of the map by providing the latitude and longitude to the panTo method.
   //Set the necessary data for a specific marker
   //Change the isOpen state to true to show the InfoWindow component
-  const handleMarkerClick = (lat, lng, address) => {
+  const handleMarkerClick = (lat, lng, id) => {
     mapRef?.panTo({ lat, lng });
-    setInfoWindowData({ address });
+    setInfoWindowData(id);
     setIsOpen(true);
   };
 
-  return <>
-    <Header/>
-    <Main>
+  //function to add the bloco to the user favorites
+  const addToUserFavorites = async (name) => {
+    const body = { _id: currentUser.sub, name: name };
 
-    {allBlocos && <MapApp className="Map-App">
-      {!isLoaded ? (
-        <h1>Loading...</h1>
-      ) : (//Creates the map with all markes and info on click
-      <GoogleMap
-      mapContainerClassName="map-container"
-      onLoad={onMapLoad}
-      //Set the isOpen state to false to hide the InfoWindow component by clicking anywhere on the map
-      onClick={() => setIsOpen(false)}
-    >
-      {allBlocos && allBlocos.map((bloco) => (
-        <MarkerF
-          key={bloco._id}
-          name={bloco.name}
-          position={{ lat: bloco.lat, lng: bloco.lng }}
-          onClick={() => {
-            handleMarkerClick(bloco.lat, bloco.lng);
-            setInfoWindowData(bloco._id);
-            setIsOpen(true);
-          }}
-        >
-          {isOpen && infoWindowData === bloco._id && (
-            //Creates a window with info 
-            <InfoWindow position={{lat: bloco.lat, lng: bloco.lng}}
-            //By default InfoWindow comes with the close icon on the top right corner
-            //Set the isOpen state as false to hide the InfoWindow component by clicking on the close icon
-              onCloseClick={() => {
-                setIsOpen(false);
-              }}
-            >
-              <h3>{allBlocos.find((bloco)=>(bloco._id === infoWindowData)).name}</h3>
-            </InfoWindow>
-          )}
-        </MarkerF>
-      ))}
-        </GoogleMap>
-      )}
-    </MapApp>}
-    </Main>
-    <Footer/>
-  </>
-}
+    fetch(`/new-favorite`, {
+      method: "PATCH",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    })
+      .then((response) => response.json())
+      .then((parse) => {
+        if (parse.status === 200) {
+          window.alert(parse.message);
+          getUserFavorites(); //necessary to render the change
+        } else if (parse.status === 409) {
+          window.alert(parse.message);
+        }
+      })
+      .catch((error) => {
+        window.alert(error);
+      });
+  };
 
+  //handler for adding bloco to favorites
+  const handlerFavoritesButton = async (name) => {
+    await addToUserFavorites(name);
+  };
+
+  return (
+    <>
+      <Header />
+      <Main>
+        {allBlocos && (
+          <MapApp className="Map-App">
+            {!isLoaded ? (
+              <h1>Loading...</h1>
+            ) : (
+              //Creates the map with all markes and info on click
+              <GoogleMap
+                mapContainerClassName="map-container"
+                onLoad={onMapLoad}
+                //Set the isOpen state to false to hide the InfoWindow component by clicking anywhere on the map
+                onClick={() => setIsOpen(false)}
+              >
+                {allBlocos &&
+                  allBlocos.map((bloco) => (
+                    <MarkerF
+                      key={bloco._id}
+                      // isDisabled={}
+                      name={bloco.name}
+                      position={{ lat: bloco.lat, lng: bloco.lng }}
+                      onClick={() => {
+                        handleMarkerClick(bloco.lat, bloco.lng, bloco._id);
+                      }}
+                    >
+                      {/* open the info window that belongs to the specific bloco */}
+                      {isOpen && infoWindowData === bloco._id && (
+                        //Creates a window with info
+                        <InfoWindowF
+                          position={{ lat: bloco.lat, lng: bloco.lng }}
+                          //By default InfoWindow comes with the close icon on the top right corner
+                          //Set the isOpen state as false to hide the InfoWindow component by clicking on the close icon
+                          onCloseClick={() => {
+                            setIsOpen(false);
+                          }}
+                        >
+                          <InfoDiv>
+                            <h3>
+                              {
+                                allBlocos.find(
+                                  (bloco) => bloco._id === infoWindowData
+                                ).name
+                              }
+                            </h3>
+                            <p>
+                              {
+                                allBlocos.find(
+                                  (bloco) => bloco._id === infoWindowData
+                                ).address
+                              }
+                            </p>
+                            {/* use date time methods to compare the time and to get strings out of the date */}
+                            {(new Date(allBlocos
+                              .find((bloco) => bloco._id === infoWindowData)
+                              .date)) ? (
+                              <DateTime>
+                              <p className="date">
+                                {(new Date(allBlocos
+                                  .find((bloco) => bloco._id === infoWindowData)
+                                  .date)).getDate()}
+                              </p>
+                              {/* <p className="time">
+                                {allBlocos
+                                  .find((bloco) => bloco._id === infoWindowData)
+                                  .date.getHours()}
+                              </p> */}
+                              </DateTime>
+                            ) : (
+                              <p>Ongoing!</p>
+                            )}
+                            {currentUser &&
+                              !userFavorites.includes(
+                                allBlocos.find(
+                                  (bloco) => bloco._id === infoWindowData
+                                ).name
+                              ) && (
+                                <StyledMdOutlineAddLocation
+                                  size={40}
+                                  onClick={() =>
+                                    handlerFavoritesButton(bloco._id)
+                                  }
+                                />
+                              )}
+                            {currentUser &&
+                              userFavorites.includes(
+                                allBlocos.find(
+                                  (bloco) => bloco._id === infoWindowData
+                                ).name
+                              ) && <StyledMdOutlineDone size={40} disabled />}
+                          </InfoDiv>
+                        </InfoWindowF>
+                      )}
+                    </MarkerF>
+                  ))}
+              </GoogleMap>
+            )}
+          </MapApp>
+        )}
+      </Main>
+      <Footer />
+    </>
+  );
+};
 
 const MapApp = styled.div`
-  height: 100vh;
+  height: 90vh;
   width: 100vw;
 
   .map-container {
-  height: 100%;
-  width: 100%;
+    height: 100%;
+    width: 100%;
   }
-`
+`;
+const InfoDiv = styled.div`
+  width: 8em;
 
+  & h3 {
+    font-weight: 700;
+    font-size: 1.2em;
+  }
+
+  & p {
+    font-style: italic;
+  }
+
+  & .date {
+    font-size: 0.8em;
+  }
+`;
+const StyledMdOutlineAddLocation = styled(MdOutlineAddLocation)``;
+
+const StyledMdOutlineDone = styled(MdOutlineDone)``;
+
+const DateTime = styled.div`
+  display:flex;
+  flex-direction: row;
+`
 export default FindAll;

@@ -55,10 +55,6 @@ const Favorites = () => {
 
     const stringSub = currentUser.sub.toString()
 
-    //blocoId is undefined, why?
-    console.log(blocoId)
-    console.log(stringSub)
-
     fetch("/favorites", {
       method: "PATCH",
       headers: {
