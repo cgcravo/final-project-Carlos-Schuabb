@@ -1,4 +1,3 @@
-import Navigator from "./Navigator.js";//maybe not
 import styled from "styled-components";
 import React, { useContext } from "react";
 import { UserContext } from "../context/UserContext.js";

@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/UserContext.js";
 import { UserLocationContext } from "../../context/UserLocationContext.js";
 import { useNavigate } from "react-router-dom";
-import DateTimePicker from 'react-datetime-picker';//stretch
+import DateTimePicker from 'react-datetime-picker';
 
 import styled from "styled-components";
 
@@ -13,7 +13,7 @@ const New = () => {
   const { currentUser } = useContext(UserContext);
   const { userLat, userLng } = useContext(UserLocationContext);
   const [radio, setRadio] = useState(null);
-  const [date, setDate] = useState(new Date());//stretch
+  const [date, setDate] = useState(new Date());
 
   // const [formData, setFormData] = useState({});//will use when after addig more fields to the form
   const [name, setName] = useState(null);
@@ -59,6 +59,8 @@ const New = () => {
       .then((parse) => {
         if (parse.status === 201) {
           window.alert(parse.message);
+        } else if (parse.status === 409) {
+          window.alert(parse.message)
         }
       })
       .catch((error) => {
@@ -81,16 +83,10 @@ const New = () => {
                   name="name"
                   onChange={(event) =>
                     setName(event.target.value)
-                    // handleChange(event.target.id, event.target.value)//will use it when add more fields to the form 
                   }
                 />
               </label>
             </NameContainer>
-
-            <DateTimePicker value={date} onChange={(value) =>{
-                      setDate(value);
-                      }
-                    }/>
 
             <RadioContainer>
               <label htmlFor="auto">
@@ -121,7 +117,6 @@ const New = () => {
                 />
               </label>
             </RadioContainer>
-            {/* stretch */}
 
             {radio === "manual" && (
               <AddressContainer>
@@ -133,13 +128,16 @@ const New = () => {
                     name="address"
                     onChange={(event) =>
                       setAddress(event.target.value)
-                      // handleChange(event.target.id, event.target.value)//will use it when add more fields to the form 
                     }
                   />
                 </label>
               </AddressContainer>
             )}
             
+            <DateTimePicker value={date} onChange={(value) =>{
+                      setDate(value);
+                      }
+                    }/>
 
             <SubmitButton type="submit">Submit</SubmitButton>
           </StyledForm>
@@ -165,7 +163,6 @@ const StyledForm = styled.form`
   flex-direction: column;
   justify-content: left;
   padding: 1em;
-  /* display: table; */
 
   & input {
     width: 40%;
@@ -180,19 +177,16 @@ const NameContainer = styled.div`
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    /* display: table-row; */
 
   & label{
     width: 100%;
     margin: 0;
-    /* display: table-cell; */
   }
   
   & input{
     margin: 0;
     position: right;
     width: 60%;
-    /* display: table-cell; */
   }
 
   & span{
@@ -208,7 +202,6 @@ const RadioContainer = styled.div`
   justify-content: space-around;
   align-items: center;
   margin: 1em 0;
-  /* display: table-row; */
 
   & .auto,
   .manual {
@@ -232,13 +225,11 @@ const AddressContainer = styled.div`
   & label{
     width: 100%;
     margin: 0;
-    /* display: table-cell; */
   }
   
   & input{
     margin: 0;
     width: 60%;
-    /* display: table-cell; */
   }
 
   & span{
@@ -250,7 +241,7 @@ const AddressContainer = styled.div`
 `
 const SubmitButton = styled.button`
   width: 40%;
-  margin: 0 auto;
+  margin: 1em auto;
 `
 
 export default New;

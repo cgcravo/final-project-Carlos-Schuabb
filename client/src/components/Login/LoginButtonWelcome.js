@@ -14,8 +14,8 @@ const StyledButton = styled.button`
   align-items: center;
   text-decoration: none;
   height: 2em;
-  background-color: #635dff;
-  color: black;
+  background-color: rgb(251 60 94);
+  color: white;
   font-weight: bold;
   font-size: 1.5em;
   margin: 1.5em 1em;
