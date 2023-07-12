@@ -13,7 +13,7 @@ const About = () => {
           <p>Carnival is worldwide known as Brazil's biggest touristic attraction. In 2023, the city of Rio de Janeiro had an estimated public of revelers of five million people with more than 500 legally registered street parades around the city in just 4 days.</p>
           <p>Most of these parades (<span> A.K.A. blocos </span>) travel many kilometers and have no specific trajectory, making very hard to find the one parade you wanted to attend to.</p>
           <p>Therefore, this application aims to help millions of people not to get lost and enjoy their time during this beautiful celebration of life!</p>
-          <p>The project is a prototype for a real time geolocation app for finding carnival street parade`s location in Brazil.</p>
+          <p>The project is a prototype for a real time geolocation app for finding carnival street parade's location in Brazil.</p>
       </TextContainer>
     </Main>
     <Footer/>
