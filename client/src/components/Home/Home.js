@@ -41,6 +41,7 @@ const Home = () => {
   return <>
     <Header/>
     <Main>
+      {/* this is the box that will contain the application */}
     <MapApp className="Map-App">
       {!isLoaded ? (
         <h1>Loading...</h1>
@@ -50,6 +51,7 @@ const Home = () => {
           mapContainerClassName="map-container"
           center={new google.maps.LatLng(userLat, userLng)}
           zoom={10}
+          options={{streetViewControl: false}}
         >
           <MarkerF position={new google.maps.LatLng(userLat, userLng)} />
         </GoogleMap>

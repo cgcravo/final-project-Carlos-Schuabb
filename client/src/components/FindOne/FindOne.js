@@ -1,9 +1,12 @@
 /* global google */
-import { GoogleMap, MarkerF, useLoadScript, InfoWindowF } from "@react-google-maps/api";
+import { GoogleMap, MarkerF, useLoadScript, InfoWindowF, DirectionsRenderer } from "@react-google-maps/api";
 import { useEffect, useState, useContext } from "react";
 import { UserContext } from "../../context/UserContext.js";
+import { UserLocationContext } from "../../context/UserLocationContext.js";
 import { MdOutlineAddLocation } from 'react-icons/md'
 import { MdOutlineDone } from 'react-icons/md'
+import { CiCircleRemove } from "react-icons/ci";
+import { FaRoute } from "react-icons/fa";
 import styled from "styled-components";
 import Header from "../Header.js";
 import Main from "../Main.js";
@@ -18,7 +21,8 @@ const FindOne = () => {
   const { id } = useParams();
   const { currentUser } = useContext(UserContext);
   const [userFavorites, setUserFavorites] = useState();
-
+  const { userLat, userLng } = useContext(UserLocationContext);
+  
   //mapRef: Stores the reference of the map component
   const [mapRef, setMapRef] = useState();
 
@@ -27,6 +31,35 @@ const FindOne = () => {
 
   //infoWindowData: Stores the necessary data of a specific marker
   const [infoWindowData, setInfoWindowData] = useState();
+
+  //the response we get from the directions API and other states needed for calculating
+  //the origin will be the users location and the destination the bloco location
+  const [directionsResponse, setDirectionsResponse] = useState(null);
+  const [distance, setDistance] = useState("");
+  const [duration, setDuration]=useState("");
+
+  //this function calculate the route from the user to the bloco and renders it on the map
+  const calculateRoute = async() => {
+    if(!userLat || !userLng || !lat || !lng){
+      return
+    }
+    const directionsService = new google.maps.DirectionsService();
+    const results = await directionsService.route({
+      origin: new google.maps.LatLng(userLat, userLng),
+      destination: new google.maps.LatLng(lat, lng),
+      travelMode: google.maps.TravelMode.DRIVING
+    })
+    setDirectionsResponse(results)
+    setDistance(results.routes[0].legs[0].distance.text)
+    setDuration(results.routes[0].legs[0].duration.text)
+  };
+
+  //this function clears the route calculations
+  const clearRoute = async()=>{
+    setDirectionsResponse(null)
+    setDistance("")
+    setDuration("")
+  }
 
   //get the bloco when mount
   useEffect(() => {
@@ -117,10 +150,12 @@ const FindOne = () => {
     await addToUserFavorites(name)
   }
 
+  //map is the google maps event
   const onMapLoad = (map) => {
     setMapRef(map);
   };
 
+  //panTo redirects the map to the center given
   const handleMarkerClick = (lat, lng, id) => {
     mapRef?.panTo({ lat, lng });
     setInfoWindowData(id);
@@ -136,6 +171,7 @@ const FindOne = () => {
   return <>
     <Header/>
     <Main>
+      {/* this is the box that will contain the application */}
     {bloco && <MapApp className="Map-App">
       {!isLoaded ? (
         <h1>Loading...</h1>
@@ -146,6 +182,7 @@ const FindOne = () => {
           center={new google.maps.LatLng(lat, lng)}
           zoom={12}
           onClick={() => setIsOpen(false)}
+          options={{streetViewControl: false}}
         >
           <MarkerF position={new google.maps.LatLng(lat, lng)} name={bloco.name} onClick={() => {
             handleMarkerClick(bloco.lat, bloco.lng, bloco._id);
@@ -168,8 +205,37 @@ const FindOne = () => {
             </InfoWindowF>
           )}
         </MarkerF>
+        {/* user marker */}
+        {currentUser && <MarkerF position={new google.maps.LatLng(userLat, userLng)} name={currentUser.nickname} onClick={() => {
+            handleMarkerClick(userLat, userLng, currentUser.nickname);
+          }}>
+          {isOpen && infoWindowData === currentUser.nickname && (
+            //Creates a window with info 
+            <InfoWindowF position={{lat: userLat, lng: userLng}}
+            //By default InfoWindow comes with the close icon on the top right corner
+            //Set the isOpen state as false to hide the InfoWindow component by clicking on the close icon
+              onCloseClick={() => {
+                setIsOpen(false);
+              }}
+            ><InfoDiv>
+              <h3>{currentUser.nickname}</h3>
+              <img url={currentUser.img}/>
+            </InfoDiv>
+            </InfoWindowF>)}
+        </MarkerF>}
+        {directionsResponse && <DirectionsRenderer directions={directionsResponse}/>}
         </GoogleMap>
       )}
+        {currentUser && <DistanceBox>
+          <ButtonsBox>
+          <StyledFaRoute size={25} onClick={calculateRoute}/>
+          <StyledCiCircleRemove size={25} onClick={clearRoute}/>
+          </ButtonsBox>
+          {directionsResponse && <div>
+          <p>Distance: {distance}</p>
+          <p>Duration: {duration}</p>
+          </div>}
+        </DistanceBox>}
     </MapApp>}
     </Main>
     <Footer/>
@@ -212,4 +278,45 @@ const StyledMdOutlineDone = styled(MdOutlineDone)`
   color: green;
 `
 
+const DistanceBox = styled.div`
+  width: 5em;
+  position: absolute;
+  background-color: white;
+  top: 0.6em;
+  right: 4em;
+  z-index: 100;
+  border-radius: 0.2em;
+  box-shadow: 1px 1px 2px gray;
+  padding: 0.5em 0;
+
+  & p{
+    margin-top: 0.3em;
+    font-size: 0.8em;
+  }
+`
+const StyledFaRoute = styled(FaRoute)`
+  color: #3878c7;
+  transition: 0.1s ease-in-out;
+
+  & :hover, :active{
+    scale: 1.10;
+    cursor: pointer;
+  }
+`
+
+const StyledCiCircleRemove = styled(CiCircleRemove)`
+  color: red;
+  transition: 0.1s ease-in-out;
+
+  & :hover, :active{
+    scale: 1.10;
+    cursor: pointer;
+  }
+`
+
+const ButtonsBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+`
 export default FindOne;
