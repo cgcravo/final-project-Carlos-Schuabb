@@ -68,6 +68,7 @@ const FindAll = () => {
   }, []);
 
   //useLoadScript: It loads the Google Maps API script
+  //key will be hidden latter
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: "AIzaSyBpjW_xSBCDcTSRuu5wpJ5mnIj_YpHwVAE",
   });
@@ -138,6 +139,7 @@ const FindAll = () => {
     <>
       <Header />
       <Main>
+        {/* this is the box that will contain the application */}
         {allBlocos && (
           <MapApp className="Map-App">
             {!isLoaded ? (
@@ -149,6 +151,7 @@ const FindAll = () => {
                 onLoad={onMapLoad}
                 //Set the isOpen state to false to hide the InfoWindow component by clicking anywhere on the map
                 onClick={() => setIsOpen(false)}
+                options={{streetViewControl: false}}
               >
                 {allBlocos &&
                   allBlocos.map((bloco) => (
