@@ -4,12 +4,16 @@ import { FaGithub, FaLinkedin, FaInstagramSquare, FaCopyright } from "react-icon
 
 const Footer = () => {
 
+  const clickHandler = (url) => {
+    window.location.href = `${url}`
+  }
+
   return(
     <StyledFooter>
       <MediaIcons>
-        <FaLinkedin className="icon"/>
-        <FaGithub className="icon"/>
-        <FaInstagramSquare className="icon"/>
+        <FaLinkedin className="icon" onClick={() => clickHandler("https://www.linkedin.com/in/carlos-guilherme-cravo-schuabb-7a9bab223/")}/>
+        <FaGithub className="icon" onClick={() => clickHandler("https://github.com/cgcravo/final-project-Carlos-Schuabb")}/>
+        <FaInstagramSquare className="icon" onClick={() => window.alert("Instagram page under construction")}/>
       </MediaIcons>
       <RightsContainer>
         <FaCopyright className="icon"/><RightsText>2023 Carlos Schuabb. All rights reserved.</RightsText>
