@@ -161,8 +161,9 @@ const FindOne = () => {
             ><InfoDiv>
               <h3>{bloco.name}</h3>
               <p>{bloco.address}</p>
-              {currentUser && !userFavorites.includes(bloco.name) && <StyledMdOutlineAddLocation size={40} onClick={()=> handlerFavoritesButton(bloco._id)}/>}
-              {currentUser && userFavorites.includes(bloco.name) && <StyledMdOutlineDone size={40} disabled/>}
+              <p className="date">{bloco.date}</p>
+              {currentUser && !userFavorites.includes(bloco.name) && <StyledMdOutlineAddLocation size={30} onClick={()=> handlerFavoritesButton(bloco._id)}/>}
+              {currentUser && userFavorites.includes(bloco.name) && <StyledMdOutlineDone size={30} disabled/>}
             </InfoDiv>
             </InfoWindowF>
           )}
@@ -186,22 +187,29 @@ const MapApp = styled.div`
 `
 const InfoDiv = styled.div`
   width: 8em;
+  text-align: center;
 
   & h3{
     font-weight: 700;
-    font-size: 1.2em;
+    font-size: 1.3em;
+    padding: 0 0 0.5em 0;
   }
 
   & p{
     font-style: italic;
+    font-size: 0.8em;
+  }
+
+  & .date {
+    font-size: 0.8em;
   }
 `
 const StyledMdOutlineAddLocation = styled(MdOutlineAddLocation)`
-
+  color: green;
 `
 
 const StyledMdOutlineDone = styled(MdOutlineDone)`
-
+  color: green;
 `
 
 export default FindOne;

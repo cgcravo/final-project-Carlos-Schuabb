@@ -188,14 +188,11 @@ const FindAll = () => {
                               }
                             </p>
                             {/* use date time methods to compare the time and to get strings out of the date */}
-                            {/* {allBlocos
+                            {allBlocos
                               .find((bloco) => bloco._id === infoWindowData)
-                              .date ? <p>{allBlocos
+                              .date && <p className="date">{allBlocos
                               .find((bloco) => bloco._id === infoWindowData)
-                              .date}</p>
-                            : (
-                              <p>Ongoing!</p>
-                            )} */}
+                              .date}</p>}
                             {currentUser &&
                               !userFavorites.includes(
                                 allBlocos.find(
@@ -203,7 +200,7 @@ const FindAll = () => {
                                 ).name
                               ) && (
                                 <StyledMdOutlineAddLocation
-                                  size={40}
+                                  size={30}
                                   onClick={() =>
                                     handlerFavoritesButton(bloco._id)
                                   }
@@ -214,7 +211,7 @@ const FindAll = () => {
                                 allBlocos.find(
                                   (bloco) => bloco._id === infoWindowData
                                 ).name
-                              ) && <StyledMdOutlineDone size={40} disabled />}
+                              ) && <StyledMdOutlineDone size={30} disabled />}
                           </InfoDiv>
                         </InfoWindowF>
                       )}
@@ -241,23 +238,30 @@ const MapApp = styled.div`
 `;
 const InfoDiv = styled.div`
   width: 8em;
+  text-align: center;
 
   & h3 {
     font-weight: 700;
-    font-size: 1.2em;
+    font-size: 1.3em;
+    padding: 0 0 0.5em 0;
   }
 
   & p {
     font-style: italic;
+    font-size: 0.8em;
   }
 
   & .date {
     font-size: 0.8em;
   }
 `;
-const StyledMdOutlineAddLocation = styled(MdOutlineAddLocation)``;
+const StyledMdOutlineAddLocation = styled(MdOutlineAddLocation)`
+  color:green;
+`;
 
-const StyledMdOutlineDone = styled(MdOutlineDone)``;
+const StyledMdOutlineDone = styled(MdOutlineDone)`
+  color: green;
+`;
 
 // const DateTime = styled.div`
 //   display:flex;
