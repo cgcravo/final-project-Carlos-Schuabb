@@ -16,12 +16,8 @@ import Footer from "../Footer.js";
 
 const FindAll = () => {
   const [allBlocos, setAllBlocos] = useState(null);
-  if(allBlocos){
-    console.log(allBlocos.map(bloco => typeof bloco.date))
-  }
   const { currentUser } = useContext(UserContext);
   const [userFavorites, setUserFavorites] = useState();
-  console.log(userFavorites);
   //get all blocos when mount
   useEffect(() => {
     fetch(`/blocos`, {
@@ -192,24 +188,14 @@ const FindAll = () => {
                               }
                             </p>
                             {/* use date time methods to compare the time and to get strings out of the date */}
-                            {(new Date(allBlocos
+                            {/* {allBlocos
                               .find((bloco) => bloco._id === infoWindowData)
-                              .date)) ? (
-                              <DateTime>
-                              <p className="date">
-                                {(new Date(allBlocos
-                                  .find((bloco) => bloco._id === infoWindowData)
-                                  .date)).getDate()}
-                              </p>
-                              {/* <p className="time">
-                                {allBlocos
-                                  .find((bloco) => bloco._id === infoWindowData)
-                                  .date.getHours()}
-                              </p> */}
-                              </DateTime>
-                            ) : (
+                              .date ? <p>{allBlocos
+                              .find((bloco) => bloco._id === infoWindowData)
+                              .date}</p>
+                            : (
                               <p>Ongoing!</p>
-                            )}
+                            )} */}
                             {currentUser &&
                               !userFavorites.includes(
                                 allBlocos.find(
@@ -273,8 +259,25 @@ const StyledMdOutlineAddLocation = styled(MdOutlineAddLocation)``;
 
 const StyledMdOutlineDone = styled(MdOutlineDone)``;
 
-const DateTime = styled.div`
-  display:flex;
-  flex-direction: row;
-`
+// const DateTime = styled.div`
+//   display:flex;
+//   flex-direction: row;
+// `
 export default FindAll;
+
+
+// new Date(allBlocos
+//   .find((bloco) => bloco._id === infoWindowData)
+//   .date)) < Date.now() ? (
+//   <DateTime>
+//   { <p className="date">
+//     {(new Date(allBlocos
+//       .find((bloco) => bloco._id === infoWindowData)
+//       .date)).getDate()}
+//   </p> }
+//   { <p className="time">
+//     {allBlocos
+//       .find((bloco) => bloco._id === infoWindowData)
+//       .date.getHours()}
+//   </p> }
+//   </DateTime>

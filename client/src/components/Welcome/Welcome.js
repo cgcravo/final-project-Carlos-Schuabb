@@ -18,7 +18,6 @@ const Welcome = () => {
   <ContentContainer>
     <TextContainer>
       <Title>Find My Bloco</Title>
-      <h2>Never lose a bloco again!</h2>
     </TextContainer>
     <ButtonsContainer>
       <LoginButtonWelcome/>
@@ -58,15 +57,14 @@ const ContentContainer = styled.div`
 const TextContainer = styled.div`
   width: 80%;
   text-align: center;
-
-  & h2{
-    font-size: 2em;
-  }
 `
 
 const Title = styled.h1`
   font-size: 5em;
+  font-family: 'Fasthand', cursive;
   margin-bottom: 0.5em;
+  font-weight: 800;
+  color: #ff3b60;
 `
 
 const ButtonsContainer =styled.div`
@@ -88,8 +86,8 @@ const ContinueButton = styled(NavLink)`
   align-items: center;
   text-decoration: none;
   height: 2em;
-  background-color: #635dff;
-  color: black;
+  background-color: #9fcd0e;
+  color: white;
   font-weight: bold;
   font-size: 1.5em;
   margin: 0 1em;
