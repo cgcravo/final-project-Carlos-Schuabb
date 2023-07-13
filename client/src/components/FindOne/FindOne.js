@@ -165,7 +165,7 @@ const FindOne = () => {
   
   //useLoadScript: It loads the Google Maps API script
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: "AIzaSyBpjW_xSBCDcTSRuu5wpJ5mnIj_YpHwVAE"
+    googleMapsApiKey: process.env.API_MAPS_KEY,
   });
 
   return <>
