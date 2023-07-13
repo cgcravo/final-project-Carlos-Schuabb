@@ -9,7 +9,6 @@ import Header from "../Header.js";
 import Main from "../Main.js";
 import Footer from "../Footer.js";
 
-
 const Home = () => {
 
   const google = window.google;
@@ -25,7 +24,7 @@ const Home = () => {
 
   //useLoadScript: It loads the Google Maps API script
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.API_MAPS_KEY,
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
   });
 
   //Auth0 loading

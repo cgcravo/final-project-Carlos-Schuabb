@@ -70,7 +70,7 @@ const FindAll = () => {
   //useLoadScript: It loads the Google Maps API script
   //key will be hidden latter
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.API_MAPS_KEY,
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
   });
 
   //mapRef: Stores the reference of the map component
