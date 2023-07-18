@@ -18,7 +18,7 @@ Therefore, this application aims to help millions of people not to get lost and 
 
 ## Features
 
-- Create events (Blocos) using an address or the user's real-time location and mark it anywhere in the world map using [Google Maps API] (user must be registered). 
+- Create events (Blocos) using an address or the user's real-time location and mark it anywhere in the world map using Google Maps API (user must be registered). 
 
 - Find all events happening in real-time.
 
