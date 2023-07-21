@@ -5,8 +5,8 @@
 ![My Blocos](assets/Screenshot%202023-07-18%20120322.jpg)
 ![Find A Bloco Page](assets/Screenshot%202023-07-18%20120421.jpg)
 
-Find My Bloco is prototype for a mobile geo application created using React.Js, Express and MongoDB. 
-It was design to help tourist that are lost or not able to find their favorit street parades (Blocos) in Brazil during Carnival.
+Find My Bloco is a prototype for a mobile geo application created using React.Js, Express and MongoDB. 
+It was design to help tourist that are lost or not able to find their favorite street parades (Blocos) in Brazil during Carnival.
 
 # About
 
